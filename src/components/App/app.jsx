@@ -1,5 +1,6 @@
 import React, { useState, useEffect }  from 'react';
-import './App.module.css';
+import AppHeader from '../app-header/app-header';
+import styles from './app.module.css';
 
 const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -25,20 +26,11 @@ function App() {
   useEffect(getData, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.app}>
+      <AppHeader/>
+      <main className={styles.main}>
+        
+      </main>
     </div>
   );
 }
