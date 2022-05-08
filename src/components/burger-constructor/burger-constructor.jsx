@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-constructor.module.css'
@@ -5,7 +6,6 @@ import ingredientItemPropType from '../../utils/custom-prop-types';
 import currency from '../../images/currency-large.png'
 
 const BurgerConstructor = ({ order }) => {
-
     const bun = order[0];
     const fixings = order.slice(1);
     const totalPrice = fixings.reduce((sum, currentItem) => sum + currentItem.price,

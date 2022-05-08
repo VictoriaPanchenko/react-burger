@@ -14,6 +14,5 @@ export const ingredientTypes = [
 ];
 
 export const getIngredientsByType = (itemType, ingredientsArr) => {
-    console.log(ingredientsArr.filter(el => el.type === itemType));
     return ingredientsArr.filter(el => el.type === itemType);
 };
