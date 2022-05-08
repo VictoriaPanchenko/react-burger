@@ -1,7 +1,9 @@
 import React, { useState, useEffect }  from 'react';
 import AppHeader from '../app-header/app-header';
+import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
+import { pickedIngredients } from '../../utils/mock-data';
 
 const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -244,7 +246,7 @@ function App() {
       <AppHeader/>
       <main className={styles.main}>
       <BurgerIngredients availableIngredients={mockData} />
-
+      <BurgerConstructor order={pickedIngredients}/>
       </main>
     </div>
   );
