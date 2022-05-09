@@ -14,7 +14,7 @@ const BurgerConstructor = ({ order }) => {
     return (
         <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 pb-10`}>
             <ul className={`${constructorStyles.list} `}>
-                <li className={` pl-8 mb-4 pr-4`}>
+                <li key={`${bun._id}top`} className={` pl-8 mb-4 pr-4`}>
                     <ConstructorElement
                         type='top'
                         isLocked={true}
@@ -25,8 +25,8 @@ const BurgerConstructor = ({ order }) => {
                 </li>
                 <div className={`${constructorStyles.fixings} pr-2`}>
                     {
-                        fixings.map(item =>
-                            <li key={item._id} className={`${constructorStyles.listElement} mb-4`}>
+                        fixings.map((item, index) =>
+                            <li key={index} className={`${constructorStyles.listElement} mb-4`}>
                                 <DragIcon type="primary" />
                                 <ConstructorElement
                                     text={item.name}
@@ -37,7 +37,7 @@ const BurgerConstructor = ({ order }) => {
                         )
                     }
                 </div>
-                <li className={`pl-8 mt-4 pr-4`}>
+                <li key={`${bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
                     <ConstructorElement
                         type='bottom'
                         isLocked={true}
