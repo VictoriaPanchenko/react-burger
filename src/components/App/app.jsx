@@ -44,13 +44,13 @@ function App() {
 
   const modalOrder = (
     <Modal title='' onClose={toggleOrderModal}>
-      <div>ABC</div>
+      <IngredientDetails ingredient={selectedIngredient} />
     </Modal>
   );
 
   const modalDetail = (
-    <Modal title='Детали ингридиента' onClose={toggleDetailModal}>
-      <div>ABC</div>
+    <Modal title='Детали ингредиента' onClose={toggleDetailModal}>
+      <IngredientDetails ingredient={selectedIngredient} />
     </Modal>
   );
 
