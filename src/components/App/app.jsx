@@ -48,7 +48,7 @@ function App() {
       <AppHeader/>
       <main className={styles.main}>
       <BurgerIngredients availableIngredients={initialData.data} onItemClick={onItemClick} />
-      <BurgerConstructor order={pickedIngredients}/>
+      <BurgerConstructor order={pickedIngredients} onOrderClick={toggleOrderModal}/>
       </main>    
     </div>
   );

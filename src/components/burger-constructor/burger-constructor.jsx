@@ -5,7 +5,7 @@ import constructorStyles from './burger-constructor.module.css'
 import ingredientItemPropType from '../../utils/custom-prop-types';
 import currency from '../../images/currency-large.png'
 
-const BurgerConstructor = ({ order }) => {
+const BurgerConstructor = ({ order, onOrderClick }) => {
     const bun = order[0];
     const fixings = order.slice(1);
     const totalPrice = fixings.reduce((sum, currentItem) => sum + currentItem.price,
@@ -50,14 +50,15 @@ const BurgerConstructor = ({ order }) => {
             <div className={`${constructorStyles.finalize} mt-10 pr-5`}>
                 <p className='text text_type_digits-medium mr-3'>{totalPrice} </p>
                 <img src={currency} alt="currency" className='mr-10'/>
-                <Button type='primary' size='medium'>Оформить заказ</Button>
+                <Button type='primary' size='medium' onClick={onOrderClick}>Оформить заказ</Button>
             </div>
         </section>
     );
 }
 
 BurgerConstructor.propTypes = {
-    order: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired
+    order: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired,
+    onOrderClick: PropTypes.func.isRequired
 }
 
 export default BurgerConstructor
