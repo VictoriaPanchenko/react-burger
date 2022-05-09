@@ -1,0 +1,13 @@
+.container {
+    margin: auto;
+    width: 720px;
+    background-color: #1c1c21;
+    border-radius: 40px;
+    box-sizing: border-box;
+  }
+  
+  .title {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+  }
+  

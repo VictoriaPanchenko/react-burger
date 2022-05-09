@@ -1,10 +1,11 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
 import { pickedIngredients } from '../../utils/mock-data';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 
 const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -28,7 +29,7 @@ function App() {
     toggleDetailModal();
   }
 
-  
+
   const getData = () => {
     setInitialData({ ...initialData, hasError: false, isLoading: true });
     fetch(sourceUrl)
@@ -41,15 +42,34 @@ function App() {
 
   useEffect(getData, []);
 
+  const modalOrder = (
+    <Modal title='' onClose={toggleOrderModal}>
+      <div>ABC</div>
+    </Modal>
+  );
+
+  const modalDetail = (
+    <Modal title='Детали ингридиента' onClose={toggleDetailModal}>
+      <div>ABC</div>
+    </Modal>
+  );
 
 
   return (
     <div className={styles.app}>
-      <AppHeader/>
+      <AppHeader />
       <main className={styles.main}>
-      <BurgerIngredients availableIngredients={initialData.data} onItemClick={onItemClick} />
-      <BurgerConstructor order={pickedIngredients} onOrderClick={toggleOrderModal}/>
-      </main>    
+        <BurgerIngredients availableIngredients={initialData.data} onItemClick={onItemClick} />
+        <BurgerConstructor order={pickedIngredients} onOrderClick={toggleOrderModal} />
+      </main>
+
+      {
+        isDetailModalOpened && modalDetail
+      }
+
+      {
+        isOrderModalOpened && modalOrder
+      }
     </div>
   );
 }
