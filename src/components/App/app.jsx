@@ -6,6 +6,7 @@ import styles from './app.module.css';
 import { pickedIngredients } from '../../utils/mock-data';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
 
 const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -44,7 +45,7 @@ function App() {
 
   const modalOrder = (
     <Modal title='' onClose={toggleOrderModal}>
-      <IngredientDetails ingredient={selectedIngredient} />
+      <OrderDetails />
     </Modal>
   );
 
