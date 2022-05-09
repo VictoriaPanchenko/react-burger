@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import IngredientsItem from '../ingredients-item/ingredients-item';
 import listStyles from './ingredients-list.module.css';
-import ingridientItemPropType from '../../utils/custom-prop-types';
+import ingredientItemPropType from '../../utils/custom-prop-types';
 
-const IngredientsList = ({itemsArr, itemName}) => {
+const IngredientsList = ({itemsArr, itemName, onItemClick}) => {
     return (
         <div className={`${listStyles.wrapper} mb-10`}>
             <h2 className='text text_type_main-medium mb-6'>{itemName}</h2>
@@ -11,7 +11,7 @@ const IngredientsList = ({itemsArr, itemName}) => {
                 {                    
                     itemsArr.map( item => 
                         <li key={item._id}>
-                            <IngredientsItem name={item.name} image={item.image} price={item.price} />
+                            <IngredientsItem item={item} onItemClick={onItemClick} />
                         </li>
                         )
                 }
@@ -23,8 +23,9 @@ const IngredientsList = ({itemsArr, itemName}) => {
 }
 
 IngredientsList.propTypes = {
-  itemsArr: PropTypes.arrayOf(ingridientItemPropType.isRequired).isRequired,
-  itemName: PropTypes.string.isRequired
+  itemsArr: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired,
+  itemName: PropTypes.string.isRequired,
+  onItemClick: PropTypes.func.isRequired
 };
 
 export default IngredientsList;

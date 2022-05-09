@@ -5,7 +5,7 @@ import ingredientItemPropType from '../../utils/custom-prop-types';
 import IngredientsNavigation from "../ingredients-navigation/ingredients-navigation";
 import IngredientsList from '../ingredients-list/ingredients-list';
 
-const BurgerIngredients = ( {availableIngredients} ) => {
+const BurgerIngredients = ( {availableIngredients, onItemClick} ) => {
 
     return (
         <section className={`${ingrediensStyles.options} pt-10`}> 
@@ -14,7 +14,8 @@ const BurgerIngredients = ( {availableIngredients} ) => {
             <div className={`${ingrediensStyles.ingrediens} mt-10`}>
                 {
                     ingredientTypes.map((type, index) => (
-                        <IngredientsList key={index} itemsArr={getIngredientsByType(type.type, availableIngredients)} itemName={type.name} />
+                        <IngredientsList key={index} itemsArr={getIngredientsByType(type.type, availableIngredients)} itemName={type.name}
+                        onItemClick={onItemClick} />
                     ))
                 }
             </div>
@@ -23,7 +24,8 @@ const BurgerIngredients = ( {availableIngredients} ) => {
 };
 
 BurgerIngredients.propTypes = {
-    availableIngredients: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired
+    availableIngredients: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired,
+    onItemClick: PropTypes.func.isRequired
   }
 
 export default BurgerIngredients;

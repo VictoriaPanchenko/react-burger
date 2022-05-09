@@ -4,25 +4,38 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
 import { pickedIngredients } from '../../utils/mock-data';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 
 const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
 function App() {
 
-  const [state, setState] = useState({
+  const [initialData, setInitialData] = useState({
     isLoading: false,
     hasError: false,
     data: []
   });
 
+  const [selectedIngredient, setSelectedIngredient] = useState({});
+  const [isOrderModalOpened, setOrderModal] = useState(false);
+  const [isDetailModalOpened, setDetailModal] = useState(false);
+
+  const toggleOrderModal = () => setOrderModal(!isOrderModalOpened);
+  const toggleDetailModal = () => setDetailModal(!isDetailModalOpened);
+
+  const onItemClick = (item) => {
+    setSelectedIngredient(item);
+    toggleDetailModal();
+  }
+
   
   const getData = () => {
-    setState({ ...state, hasError: false, isLoading: true });
+    setInitialData({ ...initialData, hasError: false, isLoading: true });
     fetch(sourceUrl)
       .then(res => res.json())
-      .then(res => setState({ ...state, data: res.data, isLoading: false }))
+      .then(res => setInitialData({ ...initialData, data: res.data, isLoading: false }))
       .catch(e => {
-        setState({ ...state, hasError: true, isLoading: false });
+        setInitialData({ ...initialData, hasError: true, isLoading: false });
       });
   };
 
@@ -34,7 +47,7 @@ function App() {
     <div className={styles.app}>
       <AppHeader/>
       <main className={styles.main}>
-      <BurgerIngredients availableIngredients={state.data} />
+      <BurgerIngredients availableIngredients={initialData.data} onItemClick={onItemClick} />
       <BurgerConstructor order={pickedIngredients}/>
       </main>    
     </div>
