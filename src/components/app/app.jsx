@@ -3,7 +3,7 @@ import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
-import { pickedIngredients } from '../../utils/mock-data';
+import { initialIngredients } from '../../utils/mock-data';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
@@ -18,6 +18,7 @@ function App() {
     data: []
   });
 
+  const [pickedIngredients, setPickedIngredients] = useState(initialIngredients);
   const [selectedIngredient, setSelectedIngredient] = useState({});
   const [isOrderModalOpened, setOrderModal] = useState(false);
   const [isDetailModalOpened, setDetailModal] = useState(false);
