@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-constructor.module.css'
@@ -6,10 +6,10 @@ import ingredientItemPropType from '../../utils/custom-prop-types';
 import currency from '../../images/currency-large.png'
 
 const BurgerConstructor = ({ order, onOrderClick }) => {
-    const bun = order[0];
-    const fixings = order.slice(1);
-    const totalPrice = fixings.reduce((sum, currentItem) => sum + currentItem.price,
-        (bun.price * 2));
+    const bun = useMemo(() => order.find(el => el.type === 'bun'), [order]);
+    const fixings = useMemo(() => order.filter(el => el.type !== 'bun'), [order]);
+    const totalPrice = useMemo(() => fixings.reduce((sum, currentItem) => sum + currentItem.price,
+        (bun.price * 2)), [bun, fixings]);
 
     return (
         <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 pb-10`}>
