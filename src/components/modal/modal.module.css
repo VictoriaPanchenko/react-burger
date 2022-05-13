@@ -1,4 +1,9 @@
 .container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
     margin: auto;
     width: 720px;
     background-color: #1c1c21;
@@ -11,3 +16,6 @@
     grid-template-columns: 1fr min-content;
   }
   
+  .closeIcon:hover {
+    cursor: pointer;
+  }

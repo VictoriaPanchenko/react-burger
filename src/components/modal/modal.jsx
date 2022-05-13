@@ -14,28 +14,28 @@ const Modal = ({ children, title, onClose }) => {
         document.addEventListener('keydown', onEscPress);
 
         //remove when unmounting
-        return(() => document.removeEventListener('keydown', onEscPress));
+        return (() => document.removeEventListener('keydown', onEscPress));
     }, []);
 
     const onEscPress = (evt) => {
         if (evt.key === 'Escape')
             onClose();
-    } 
-
-    const onModalClick = (evt) => {
-        evt.stopPropagation();
     }
 
+
     return ReactDOM.createPortal((
-        <ModalOverlay onClick={onClose}>
-            <div className={`${modalStyles.container} pt-10 pr-10 pb-15 pl-10`} onClick={onModalClick}>
+        <>
+            <div className={`${modalStyles.container} pt-10 pr-10 pb-15 pl-10`} >
                 <div className={modalStyles.title}>
                     <h2 className='text text_type_main-large'>{title}</h2>
-                    <CloseIcon type='primary' onClick={onClose} />
+                    <span className={modalStyles.closeIcon}>
+                        <CloseIcon type='primary' onClick={onClose} />
+                    </span>
                 </div>
                 {children}
             </div>
-        </ModalOverlay>
+            <ModalOverlay onClick={onClose} />
+        </>
     ), modalRoot);
 };
 
