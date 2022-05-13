@@ -27,7 +27,7 @@ const BurgerConstructor = ({ order, onOrderClick }) => {
                     {
                         fixings.map((item, index) =>
                             <li key={index} className={`${constructorStyles.listElement} mb-4`}>
-                                <span>
+                                <span className={constructorStyles.dragIcon}>
                                 <DragIcon type="primary" />
                                 </span>
                                 <ConstructorElement
