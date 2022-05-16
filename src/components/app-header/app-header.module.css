@@ -1,0 +1,39 @@
+.header {
+    margin: 0 auto;
+    width: 100%;
+    background-color: #1c1c21;
+  }
+  
+  .navigation {
+    width: 1280px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0;  
+  }
+  
+  .wrapper {
+    composes: navigation;
+    margin: 0;
+    width: 61.5%;
+  }
+  
+  .menuList {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;    
+  }
+  
+  .link {
+    display: flex;
+    justify-content: flex-start;
+    color: #8585ad;
+    text-decoration: none;
+  }
+  
+  .linkActive {
+    composes: link;
+    color: #f2f2f3;
+  }
