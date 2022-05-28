@@ -8,7 +8,8 @@ import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import BurgerIngredientsContext from '../../context/burger-ingredients-context';
 
-const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
+const getIngredientsUrl = 'https://norma.nomoreparties.space/api/ingredients';
+const postOrderUrl = 'https://norma.nomoreparties.space/api/orders';
 
 function App() {
 
@@ -20,8 +21,20 @@ function App() {
   });
 
   const [selectedIngredient, setSelectedIngredient] = useState({});
+  const [orderInfo, setOrderInfo] = useState({});
   const [isOrderModalOpened, setOrderModal] = useState(false);
   const [isDetailModalOpened, setDetailModal] = useState(false);
+
+  const sendOrder = () => {
+    // get ids of selected ingredients
+    const productIds = state.order.map(item => item._id);
+
+    // get order's number
+    getOrderNumber(productIds);
+
+    //toggle state of modal
+    toggleOrderModal();
+  }
 
   const toggleOrderModal = () => setOrderModal(!isOrderModalOpened);
   const toggleDetailModal = () => setDetailModal(!isDetailModalOpened);
@@ -31,15 +44,14 @@ function App() {
     toggleDetailModal();
   }
 
-
   const getData = () => {
     setState({ ...state, hasError: false, isLoading: true });
-    fetch(sourceUrl)
+    fetch(getIngredientsUrl)
       .then(res => res.json())
       .then(res => setState({
         ...state,
         data: res.data,
-        order: [res.data[0], res.data[5], res.data[4], res.data[7], res.data[2]],
+        order: [res.data[0], res.data[3], res.data[7], res.data[2], res.data[5], res.data[4]],
         isLoading: false
       }))
       .catch(e => {
@@ -47,11 +59,31 @@ function App() {
       });
   };
 
+  //  get order's number and set it to state
+  const getOrderNumber = (productIds) => {
+    fetch(postOrderUrl, {
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      method: 'POST',
+      body: JSON.stringify({ ingredients: productIds})
+    })
+    .then(res => res.json())
+    .then(res => setOrderInfo({
+      number: res.order.number,
+      hasError: false
+    }))
+    .catch(e => setOrderInfo({
+      number: 0,
+      hasError: true
+    }))
+  }
+
   useEffect(getData, []);
 
   const modalOrder = (
     <Modal title='' onClose={toggleOrderModal}>
-      <OrderDetails />
+      <OrderDetails orderInfo={orderInfo} />
     </Modal>
   );
 
@@ -70,7 +102,7 @@ function App() {
         !state.isLoading && !state.hasError && state.data.length > 0 &&
           <BurgerIngredientsContext.Provider value={state}>
             <BurgerIngredients onItemClick={onItemClick} />
-            <BurgerConstructor onOrderClick={toggleOrderModal} />
+            <BurgerConstructor onOrderClick={sendOrder} />
           </BurgerIngredientsContext.Provider>
         }
       </main>
