@@ -8,7 +8,7 @@ import IngredientsList from '../ingredients-list/ingredients-list';
 
 const BurgerIngredients = ( { onItemClick} ) => {
 
-    const availableIngredients = useContext(BurgerIngredientsContext);
+    const availableIngredients = useContext(BurgerIngredientsContext).data;
 
     return (
         <section className={`${ingrediensStyles.options} pt-10`}> 

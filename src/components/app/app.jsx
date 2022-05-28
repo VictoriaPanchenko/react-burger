@@ -3,7 +3,6 @@ import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
-import { initialIngredients } from '../../utils/mock-data';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
@@ -13,13 +12,13 @@ const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
 function App() {
 
-  const [initialData, setInitialData] = useState({
-    isLoading: false,
+  const [state, setState] = useState({
+    isLoading: true,
     hasError: false,
-    data: []
+    data: [],
+    order: [],
   });
 
-  const [pickedIngredients, setPickedIngredients] = useState(initialIngredients);
   const [selectedIngredient, setSelectedIngredient] = useState({});
   const [isOrderModalOpened, setOrderModal] = useState(false);
   const [isDetailModalOpened, setDetailModal] = useState(false);
@@ -34,12 +33,17 @@ function App() {
 
 
   const getData = () => {
-    setInitialData({ ...initialData, hasError: false, isLoading: true });
+    setState({ ...state, hasError: false, isLoading: true });
     fetch(sourceUrl)
       .then(res => res.json())
-      .then(res => setInitialData({ ...initialData, data: res.data, isLoading: false }))
+      .then(res => setState({
+        ...state,
+        data: res.data,
+        order: [res.data[0], res.data[5], res.data[4], res.data[7], res.data[2]],
+        isLoading: false
+      }))
       .catch(e => {
-        setInitialData({ ...initialData, hasError: true, isLoading: false });
+        setState({ ...state, hasError: true, isLoading: false });
       });
   };
 
@@ -62,10 +66,13 @@ function App() {
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
-        <BurgerIngredientsContext.Provider value={initialData.data}>
-        <BurgerIngredients onItemClick={onItemClick} />
-        </BurgerIngredientsContext.Provider>
-        <BurgerConstructor order={pickedIngredients} onOrderClick={toggleOrderModal} />
+        {
+        !state.isLoading && !state.hasError && state.data.length > 0 &&
+          <BurgerIngredientsContext.Provider value={state}>
+            <BurgerIngredients onItemClick={onItemClick} />
+            <BurgerConstructor onOrderClick={toggleOrderModal} />
+          </BurgerIngredientsContext.Provider>
+        }
       </main>
 
       {
