@@ -1,11 +1,14 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import ingrediensStyles from './burger-ingredients.module.css';
 import {getIngredientsByType, categories} from '../../utils/product-types';
-import ingredientItemPropType from '../../utils/custom-prop-types';
+import BurgerIngredientsContext from '../../context/burger-ingredients-context';
 import IngredientsNavigation from "../ingredients-navigation/ingredients-navigation";
 import IngredientsList from '../ingredients-list/ingredients-list';
 
-const BurgerIngredients = ( {availableIngredients, onItemClick} ) => {
+const BurgerIngredients = ( { onItemClick} ) => {
+
+    const availableIngredients = useContext(BurgerIngredientsContext);
 
     return (
         <section className={`${ingrediensStyles.options} pt-10`}> 
@@ -27,7 +30,6 @@ const BurgerIngredients = ( {availableIngredients, onItemClick} ) => {
 };
 
 BurgerIngredients.propTypes = {
-    availableIngredients: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired,
     onItemClick: PropTypes.func.isRequired
   }
 

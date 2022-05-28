@@ -7,6 +7,7 @@ import { initialIngredients } from '../../utils/mock-data';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import BurgerIngredientsContext from '../../context/burger-ingredients-context';
 
 const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -61,7 +62,9 @@ function App() {
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
-        <BurgerIngredients availableIngredients={initialData.data} onItemClick={onItemClick} />
+        <BurgerIngredientsContext.Provider value={initialData.data}>
+        <BurgerIngredients onItemClick={onItemClick} />
+        </BurgerIngredientsContext.Provider>
         <BurgerConstructor order={pickedIngredients} onOrderClick={toggleOrderModal} />
       </main>
 
