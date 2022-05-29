@@ -1,7 +1,7 @@
 const baseUrl = 'https://norma.nomoreparties.space/api';
 
 const checkResponse = (res) => {
-    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+    return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
 };
 
 const getInitialIngredients = () => {
@@ -17,7 +17,7 @@ const postOrder = (productIds) => {
         method: 'POST',
         body: JSON.stringify({ ingredients: productIds })
     })
-        .then(res => checkResponse(res))
+        .then(checkResponse)
 }
 
 export { getInitialIngredients, postOrder };
