@@ -7,9 +7,7 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import BurgerIngredientsContext from '../../context/burger-ingredients-context';
-
-const getIngredientsUrl = 'https://norma.nomoreparties.space/api/ingredients';
-const postOrderUrl = 'https://norma.nomoreparties.space/api/orders';
+import {getInitialIngredients, postOrder} from '../../api/api-requests';
 
 function App() {
 
@@ -46,8 +44,8 @@ function App() {
 
   const getData = () => {
     setState({ ...state, hasError: false, isLoading: true });
-    fetch(getIngredientsUrl)
-      .then(res => res.json())
+    
+    getInitialIngredients()
       .then(res => setState({
         ...state,
         data: res.data,
@@ -61,14 +59,8 @@ function App() {
 
   //  get order's number and set it to state
   const getOrderNumber = (productIds) => {
-    fetch(postOrderUrl, {
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      method: 'POST',
-      body: JSON.stringify({ ingredients: productIds})
-    })
-    .then(res => res.json())
+    
+    postOrder(productIds)
     .then(res => setOrderInfo({
       number: res.order.number,
       hasError: false
