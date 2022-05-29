@@ -16,9 +16,9 @@ const OrderDetails = ({ orderInfo }) => {
 
 OrderDetails.propTypes = {
   orderInfo: PropTypes.shape({
-    number: PropTypes.number.isRequired,
-    error: PropTypes.bool.isRequired
-  })
+    number: PropTypes.number,
+    error: PropTypes.bool
+  }).isRequired
 }
 
 export default OrderDetails;
