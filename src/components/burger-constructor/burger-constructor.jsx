@@ -1,31 +1,55 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useContext, useReducer, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import constructorStyles from './burger-constructor.module.css'
-import ingredientItemPropType from '../../utils/custom-prop-types';
-import currency from '../../images/currency-large.png'
+import constructorStyles from './burger-constructor.module.css';
+import currency from '../../images/currency-large.png';
+import BurgerIngredientsContext from "../../context/burger-ingredients-context";
 
-const BurgerConstructor = ({ order, onOrderClick }) => {
-    const bun = useMemo(() => order.find(el => el.type === 'bun'), [order]);
-    const fixings = useMemo(() => order.filter(el => el.type !== 'bun'), [order]);
-    const totalPrice = useMemo(() => fixings.reduce((sum, currentItem) => sum + currentItem.price,
-        (bun.price * 2)), [bun, fixings]);
+const BurgerConstructor = ({ onOrderClick }) => {
+
+    const constructorContext = useContext(BurgerIngredientsContext);
+    
+    const bun = constructorContext.order.find(el => el.type === 'bun');
+    const fixings = constructorContext.order.filter(el => el.type !== 'bun');
+
+    const order = useMemo(() => {
+        return {
+            bun,
+            fixings
+        }
+    }, [constructorContext]);
+
+    const initialTotalPrice = 0;
+
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case "update":
+                return order.fixings.reduce((sum, currentItem) => sum + currentItem.price, order.bun.price * 2);
+            default:
+                throw new Error(`Unsupported type of action: ${action.type}`);
+        }
+    }
+
+    const [totalPrice, dispatch] = useReducer(reducer, initialTotalPrice);
+
+    //calculate total price
+    useEffect(() => dispatch({ type: "update"}), [order]);
 
     return (
         <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 pb-10`}>
             <ul className={`${constructorStyles.list} `}>
-                <li key={`${bun._id}top`} className={` pl-8 mb-4 pr-4`}>
+                <li key={`${order.bun._id}top`} className={` pl-8 mb-4 pr-4`}>
                     <ConstructorElement
                         type='top'
                         isLocked={true}
-                        text={`${bun.name} (верх)`}
-                        price={bun.price}
-                        thumbnail={bun.image_mobile}
+                        text={`${order.bun.name} (верх)`}
+                        price={order.bun.price}
+                        thumbnail={order.bun.image_mobile}
                     />
                 </li>
                 <div className={`${constructorStyles.fixings} pr-2`}>
                     {
-                        fixings.map((item, index) =>
+                        order.fixings.map((item, index) =>
                             <li key={index} className={`${constructorStyles.listElement} mb-4`}>
                                 <span className={constructorStyles.dragIcon}>
                                 <DragIcon type="primary" />
@@ -39,13 +63,13 @@ const BurgerConstructor = ({ order, onOrderClick }) => {
                         )
                     }
                 </div>
-                <li key={`${bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
+                <li key={`${order.bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
                     <ConstructorElement
                         type='bottom'
                         isLocked={true}
-                        text={`${bun.name} (низ)`}
-                        price={bun.price}
-                        thumbnail={bun.image_mobile}
+                        text={`${order.bun.name} (низ)`}
+                        price={order.bun.price}
+                        thumbnail={order.bun.image_mobile}
                     />
                 </li>
             </ul>
@@ -59,7 +83,6 @@ const BurgerConstructor = ({ order, onOrderClick }) => {
 }
 
 BurgerConstructor.propTypes = {
-    order: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired,
     onOrderClick: PropTypes.func.isRequired
 }
 

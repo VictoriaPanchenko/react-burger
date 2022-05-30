@@ -3,25 +3,36 @@ import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
-import { initialIngredients } from '../../utils/mock-data';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-
-const sourceUrl = 'https://norma.nomoreparties.space/api/ingredients';
+import BurgerIngredientsContext from '../../context/burger-ingredients-context';
+import {getInitialIngredients, postOrder} from '../../api/api-requests';
 
 function App() {
 
-  const [initialData, setInitialData] = useState({
-    isLoading: false,
+  const [state, setState] = useState({
+    isLoading: true,
     hasError: false,
-    data: []
+    data: [],
+    order: [],
   });
 
-  const [pickedIngredients, setPickedIngredients] = useState(initialIngredients);
   const [selectedIngredient, setSelectedIngredient] = useState({});
+  const [orderInfo, setOrderInfo] = useState({});
   const [isOrderModalOpened, setOrderModal] = useState(false);
   const [isDetailModalOpened, setDetailModal] = useState(false);
+
+  const sendOrder = () => {
+    // get ids of selected ingredients
+    const productIds = state.order.map(item => item._id);
+
+    // get order's number
+    getOrderNumber(productIds);
+
+    //toggle state of modal
+    toggleOrderModal();
+  }
 
   const toggleOrderModal = () => setOrderModal(!isOrderModalOpened);
   const toggleDetailModal = () => setDetailModal(!isDetailModalOpened);
@@ -31,22 +42,40 @@ function App() {
     toggleDetailModal();
   }
 
-
   const getData = () => {
-    setInitialData({ ...initialData, hasError: false, isLoading: true });
-    fetch(sourceUrl)
-      .then(res => res.json())
-      .then(res => setInitialData({ ...initialData, data: res.data, isLoading: false }))
+    setState({ ...state, hasError: false, isLoading: true });
+    
+    getInitialIngredients()
+      .then(res => setState({
+        ...state,
+        data: res.data,
+        order: [res.data[0], res.data[3], res.data[7], res.data[2], res.data[5], res.data[4]],
+        isLoading: false
+      }))
       .catch(e => {
-        setInitialData({ ...initialData, hasError: true, isLoading: false });
+        setState({ ...state, hasError: true, isLoading: false });
       });
   };
+
+  //  get order's number and set it to state
+  const getOrderNumber = (productIds) => {
+    
+    postOrder(productIds)
+    .then(res => setOrderInfo({
+      number: res.order.number,
+      hasError: false
+    }))
+    .catch(e => setOrderInfo({
+      number: 0,
+      hasError: true
+    }))
+  }
 
   useEffect(getData, []);
 
   const modalOrder = (
     <Modal title='' onClose={toggleOrderModal}>
-      <OrderDetails />
+      <OrderDetails orderInfo={orderInfo} />
     </Modal>
   );
 
@@ -61,8 +90,13 @@ function App() {
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
-        <BurgerIngredients availableIngredients={initialData.data} onItemClick={onItemClick} />
-        <BurgerConstructor order={pickedIngredients} onOrderClick={toggleOrderModal} />
+        {
+        !state.isLoading && !state.hasError && state.data.length > 0 &&
+          <BurgerIngredientsContext.Provider value={state}>
+            <BurgerIngredients onItemClick={onItemClick} />
+            <BurgerConstructor onOrderClick={sendOrder} />
+          </BurgerIngredientsContext.Provider>
+        }
       </main>
 
       {
