@@ -1,14 +1,14 @@
 import { useContext } from 'react';
-import PropTypes from 'prop-types';
 import ingrediensStyles from './burger-ingredients.module.css';
 import {getIngredientsByType, categories} from '../../utils/product-types';
-import BurgerIngredientsContext from '../../context/burger-ingredients-context';
 import IngredientsNavigation from "../ingredients-navigation/ingredients-navigation";
 import IngredientsList from '../ingredients-list/ingredients-list';
+import { useDispatch, useSelector } from 'react-redux';
 
-const BurgerIngredients = ( { onItemClick} ) => {
 
-    const availableIngredients = useContext(BurgerIngredientsContext).data;
+const BurgerIngredients = ( ) => {
+
+    const { ingredients } = useSelector(store => store.ingredients);
 
     return (
         <section className={`${ingrediensStyles.options} pt-10`}> 
@@ -18,19 +18,14 @@ const BurgerIngredients = ( { onItemClick} ) => {
                 {
                     categories.map((category, index) => (
                         <IngredientsList key={index} 
-                        itemsArr={getIngredientsByType(category.type, availableIngredients)}
+                        itemsArr={getIngredientsByType(category.type, ingredients)}
                         itemId={category.id} 
-                        itemName={category.name}
-                        onItemClick={onItemClick} />
+                        itemName={category.name} />
                     ))
                 }
             </div>
         </section>
     )
 };
-
-BurgerIngredients.propTypes = {
-    onItemClick: PropTypes.func.isRequired
-  }
 
 export default BurgerIngredients;

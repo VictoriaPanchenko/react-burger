@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
@@ -6,84 +7,41 @@ import styles from './app.module.css';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import BurgerIngredientsContext from '../../context/burger-ingredients-context';
-import {getInitialIngredients, postOrder} from '../../api/api-requests';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { getIngredients } from '../../services/actions/ingredients';
+import { closeOrderModal } from '../../services/actions/order';
+import { closeDetailModal } from '../../services/actions/ingredient-detail';
 
 function App() {
 
-  const [state, setState] = useState({
-    isLoading: true,
-    hasError: false,
-    data: [],
-    order: [],
-  });
+  const dispatch = useDispatch();
+  const { ingredientsRequest, ingredientsFailed } = useSelector(store => store.ingredients);
+  const { isDetailOpened } = useSelector(store => store.itemDetail);
+  const { isOrderModalOpened } = useSelector(store => store.order);
 
-  const [selectedIngredient, setSelectedIngredient] = useState({});
-  const [orderInfo, setOrderInfo] = useState({});
-  const [isOrderModalOpened, setOrderModal] = useState(false);
-  const [isDetailModalOpened, setDetailModal] = useState(false);
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, []);
 
-  const sendOrder = () => {
-    // get ids of selected ingredients
-    const productIds = state.order.map(item => item._id);
+  const closeOrder = useCallback(() => {
+    dispatch(closeOrderModal());
+  }, [dispatch]);
 
-    // get order's number
-    getOrderNumber(productIds);
+  const closeDetail = useCallback(() => {
+    dispatch(closeDetailModal());
+  }, [dispatch]);
 
-    //toggle state of modal
-    toggleOrderModal();
-  }
-
-  const toggleOrderModal = () => setOrderModal(!isOrderModalOpened);
-  const toggleDetailModal = () => setDetailModal(!isDetailModalOpened);
-
-  const onItemClick = (item) => {
-    setSelectedIngredient(item);
-    toggleDetailModal();
-  }
-
-  const getData = () => {
-    setState({ ...state, hasError: false, isLoading: true });
-    
-    getInitialIngredients()
-      .then(res => setState({
-        ...state,
-        data: res.data,
-        order: [res.data[0], res.data[3], res.data[7], res.data[2], res.data[5], res.data[4]],
-        isLoading: false
-      }))
-      .catch(e => {
-        setState({ ...state, hasError: true, isLoading: false });
-      });
-  };
-
-  //  get order's number and set it to state
-  const getOrderNumber = (productIds) => {
-    
-    postOrder(productIds)
-    .then(res => setOrderInfo({
-      number: res.order.number,
-      hasError: false
-    }))
-    .catch(e => setOrderInfo({
-      number: 0,
-      hasError: true
-    }))
-  }
-
-  useEffect(getData, []);
-
+  
   const modalOrder = (
-    <Modal title='' onClose={toggleOrderModal}>
-      <OrderDetails orderInfo={orderInfo} />
+    <Modal title='' onClose={closeOrder}>
+      <OrderDetails />
     </Modal>
   );
 
   const modalDetail = (
-    <Modal title='Детали ингредиента' onClose={toggleDetailModal}>
-      <IngredientDetails ingredient={selectedIngredient} />
+    <Modal title='Детали ингредиента' onClose={closeDetail}>
+      <IngredientDetails />
     </Modal>
   );
 
@@ -93,18 +51,17 @@ function App() {
       <AppHeader />
       <main className={styles.main}>
         {
-        !state.isLoading && !state.hasError && state.data.length > 0 &&
-          <BurgerIngredientsContext.Provider value={state}>
-            <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients onItemClick={onItemClick} />
-            <BurgerConstructor onOrderClick={sendOrder} />
-            </DndProvider>
-          </BurgerIngredientsContext.Provider>
+          !ingredientsRequest && !ingredientsFailed &&
+
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </DndProvider>
         }
       </main>
 
       {
-        isDetailModalOpened && modalDetail
+        isDetailOpened && modalDetail
       }
 
       {
