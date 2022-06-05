@@ -8,6 +8,8 @@ import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import BurgerIngredientsContext from '../../context/burger-ingredients-context';
 import {getInitialIngredients, postOrder} from '../../api/api-requests';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
 
@@ -93,8 +95,10 @@ function App() {
         {
         !state.isLoading && !state.hasError && state.data.length > 0 &&
           <BurgerIngredientsContext.Provider value={state}>
+            <DndProvider backend={HTML5Backend}>
             <BurgerIngredients onItemClick={onItemClick} />
             <BurgerConstructor onOrderClick={sendOrder} />
+            </DndProvider>
           </BurgerIngredientsContext.Provider>
         }
       </main>
