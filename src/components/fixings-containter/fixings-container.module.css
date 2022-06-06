@@ -1,0 +1,14 @@
+.dragIcon {
+  cursor: pointer;
+}
+
+.listElement {
+  display: flex;
+  align-items: center;
+  gap: 13.5px;
+  width: 564px;
+}
+
+.listElement:last-child {
+  margin-bottom: 0;
+}

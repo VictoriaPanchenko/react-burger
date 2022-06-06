@@ -1,11 +1,12 @@
-import React, { useMemo, useContext, useReducer, useEffect } from "react";
-import { ConstructorElement, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import React from "react";
+import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-constructor.module.css';
 import currency from '../../images/currency-large.png';
 import { sendOrder } from "../../services/actions/order";
 import { addItem, removeItem } from "../../services/actions/constructor";
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from "react-dnd";
+import FixingsContainer from '../fixings-containter/fixings-container';
 
 const BurgerConstructor = () => {
 
@@ -33,6 +34,7 @@ const BurgerConstructor = () => {
     return (
         <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 pb-10`}>
             <ul className={`${isHover ? constructorStyles.dropTarget : constructorStyles.list}`} ref={drop} >
+                {!bun && fixings.length === 0 && <h2 className="text text_type_main-medium">Выбранные ингредиенты</h2>}
                { bun && <li key={`${bun._id}top`} className={` pl-8 mb-4 pr-4`}>
                     <ConstructorElement
                         type='top'
@@ -43,22 +45,16 @@ const BurgerConstructor = () => {
                     />
                 </li> }
                 <div className={`${constructorStyles.fixings} pr-2`}>
-                    {   fixings && fixings.length > 0 && 
+                {   fixings && fixings.length > 0 && 
                         fixings.map((item, index) =>
-                            <li key={index} className={`${constructorStyles.listElement} mb-4`}>
-                                <span className={constructorStyles.dragIcon}>
-                                <DragIcon type="primary" />
-                                </span>
-                                <ConstructorElement
-                                    text={item.name}
-                                    price={item.price}
-                                    thumbnail={item.image_mobile}
-                                    handleClose={() => {handleDelete(item)}}
-                                />
-                            </li>
+                        <FixingsContainer
+                        key={item.uId}
+                        item={item}
+                        index={index}
+                        handleDelete={handleDelete} />
                         )
-                    }
-                </div>
+                    }               
+                </div>               
                 { bun && <li key={`${bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
                     <ConstructorElement
                         type='bottom'

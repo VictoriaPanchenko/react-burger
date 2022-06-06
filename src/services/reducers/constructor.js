@@ -1,5 +1,6 @@
-import { ADD, DELETE } from '../actions/constructor';
+import { ADD, DELETE, CHANGE_ORDER } from '../actions/constructor';
 import { v4 as uuidv4 } from 'uuid';
+import update from 'immutability-helper';
 
 const initialState = {
     bun: null,
@@ -45,6 +46,17 @@ export const constructorReducer = (state = initialState, action) => {
                 productsIds: [...state.productsIds].filter(id => id !== action.item._id),
                 totalPrice: state.totalPrice - action.item.price,
             };
+
+        case CHANGE_ORDER:
+            return {
+                ...state,
+                fixings: update(state.fixings, {
+                    $splice: [
+                        [action.dragIndex, 1],
+                        [action.hoverIndex, 0, state.fixings[action.dragIndex]],
+                      ]
+                })
+            }
 
         default:
             return state;
