@@ -1,28 +1,49 @@
-import { useContext } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ingrediensStyles from './burger-ingredients.module.css';
-import {getIngredientsByType, categories} from '../../utils/product-types';
+import { categories } from '../../utils/product-types';
 import IngredientsNavigation from "../ingredients-navigation/ingredients-navigation";
 import IngredientsList from '../ingredients-list/ingredients-list';
 import { useDispatch, useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 
 
-const BurgerIngredients = ( ) => {
+const BurgerIngredients = () => {
 
     const { ingredients } = useSelector(store => store.ingredients);
+    const buns = ingredients.filter((ingredient) => ingredient.type === categories.Bun.type);
+    const fixings = ingredients.filter((ingredient) => ingredient.type === categories.Main.type);
+    const sauces = ingredients.filter((ingredient) => ingredient.type === categories.Sauce.type);
+
+    const [currentTab, setCurrentTab] = useState('bun');
+
+    const [bunsRef, inViewBuns] = useInView({ threshold: 0.6 });
+    const [saucesRef, inViewSauces] = useInView({ threshold: 0.1 });
+    const [fixingsRef, inViewFixings] = useInView({ threshold: 0.1 });
+
+    useEffect(() => {
+        if (inViewBuns) {
+            setCurrentTab('bun');
+        } else if (inViewSauces) {
+            setCurrentTab('sauce');
+        } else if (inViewFixings) {
+            setCurrentTab('main');
+        }
+    }, [inViewBuns, inViewSauces, inViewFixings]);
+
+    const switchTab = useCallback(
+        type => {
+            setCurrentTab(type);
+            document.getElementById(type).scrollIntoView({ behavior: 'smooth' });
+        }, [currentTab]);
 
     return (
-        <section className={`${ingrediensStyles.options} pt-10`}> 
+        <section className={`${ingrediensStyles.options} pt-10`}>
             <h1 className="text text_type_main-large pb-5">Соберите бургер</h1>
-            <IngredientsNavigation tabs={categories} />
+            <IngredientsNavigation tabs={[categories.Bun, categories.Sauce, categories.Main]} current={currentTab} handleClick={switchTab} />
             <div className={`${ingrediensStyles.ingrediens} mt-10`}>
-                {
-                    categories.map((category, index) => (
-                        <IngredientsList key={index} 
-                        itemsArr={getIngredientsByType(category.type, ingredients)}
-                        itemId={category.id} 
-                        itemName={category.name} />
-                    ))
-                }
+                <IngredientsList itemsArr={buns} itemType={categories.Bun} ref={bunsRef} />
+                <IngredientsList itemsArr={sauces} itemType={categories.Sauce} ref={saucesRef} />
+                <IngredientsList itemsArr={fixings} itemType={categories.Main} ref={fixingsRef} />
             </div>
         </section>
     )
