@@ -12,3 +12,7 @@
     text-align: center;
   }
 
+  .isDragging {
+    background: radial-gradient(circle, rgba(166, 81, 195, 1) 0%, rgba(19, 19, 22, 0) 45%);
+  }
+  

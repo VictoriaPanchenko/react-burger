@@ -1,9 +1,11 @@
 import React, { useMemo, useContext, useReducer, useEffect } from "react";
-import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, DragIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-constructor.module.css';
 import currency from '../../images/currency-large.png';
 import { sendOrder } from "../../services/actions/order";
+import { addItem, removeItem } from "../../services/actions/constructor";
 import { useDispatch, useSelector } from 'react-redux';
+import { useDrop } from "react-dnd";
 
 const BurgerConstructor = () => {
 
@@ -14,9 +16,23 @@ const BurgerConstructor = () => {
         dispatch(sendOrder(ids));
     }
 
+    const [{isHover}, drop] = useDrop({
+        accept: "ingredient",
+        drop(item) {
+            dispatch(addItem(item));
+        },
+        collect: monitor => ({
+            isHover: monitor.isOver(),
+        })
+    });
+
+    const handleDelete = (item) => {
+        dispatch(removeItem(item));
+    }  
+
     return (
         <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 pb-10`}>
-            <ul className={`${constructorStyles.list} `}>
+            <ul className={`${isHover ? constructorStyles.dropTarget : constructorStyles.list}`} ref={drop} >
                { bun && <li key={`${bun._id}top`} className={` pl-8 mb-4 pr-4`}>
                     <ConstructorElement
                         type='top'
@@ -37,6 +53,7 @@ const BurgerConstructor = () => {
                                     text={item.name}
                                     price={item.price}
                                     thumbnail={item.image_mobile}
+                                    handleClose={() => {handleDelete(item)}}
                                 />
                             </li>
                         )

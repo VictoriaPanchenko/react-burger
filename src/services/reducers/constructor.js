@@ -1,4 +1,5 @@
 import { ADD, DELETE } from '../actions/constructor';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
     bun: null,
@@ -32,7 +33,7 @@ export const constructorReducer = (state = initialState, action) => {
             //fixings
             return {
                 ...state,
-                fixings: [...state.fixings, action.item],
+                fixings: [...state.fixings, { ...action.item, uId: uuidv4() }],
                 productsIds: [...state.productsIds, action.item._id],
                 totalPrice: state.totalPrice + action.item.price,
             };
@@ -40,7 +41,7 @@ export const constructorReducer = (state = initialState, action) => {
         case DELETE:
             return {
                 ...state,
-                fixings: [...state.fixings].filter(item => item._id !== action.item._id),
+                fixings: [...state.fixings].filter(item => item.uId !== action.item.uId),
                 productsIds: [...state.productsIds].filter(id => id !== action.item._id),
                 totalPrice: state.totalPrice - action.item.price,
             };
