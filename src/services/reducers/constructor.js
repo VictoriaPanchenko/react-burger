@@ -1,5 +1,4 @@
 import { ADD, DELETE, CHANGE_ORDER } from '../actions/constructor';
-import { v4 as uuidv4 } from 'uuid';
 import update from 'immutability-helper';
 
 const initialState = {
@@ -34,7 +33,7 @@ export const constructorReducer = (state = initialState, action) => {
             //fixings
             return {
                 ...state,
-                fixings: [...state.fixings, { ...action.item, uId: uuidv4() }],
+                fixings: [...state.fixings, action.item ],
                 productsIds: [...state.productsIds, action.item._id],
                 totalPrice: state.totalPrice + action.item.price,
             };

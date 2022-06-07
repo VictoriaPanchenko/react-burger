@@ -1,12 +1,17 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const ADD = 'ADD';
 export const DELETE = 'DELETE';
 export const CHANGE_ORDER = 'CHANGE_ORDER';
 
-
 export function addItem(item) {
+ 
   return {
     type: ADD,
-    item,
+    item: {
+      ...item,
+      uId: uuidv4()
+    }
   };
 }
 
