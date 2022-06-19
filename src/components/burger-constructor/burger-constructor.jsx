@@ -1,89 +1,78 @@
-import React, { useMemo, useContext, useReducer, useEffect } from "react";
-import PropTypes from 'prop-types';
-import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import React from "react";
+import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-constructor.module.css';
 import currency from '../../images/currency-large.png';
-import BurgerIngredientsContext from "../../context/burger-ingredients-context";
+import { sendOrder } from "../../services/actions/order";
+import { addItem, removeItem } from "../../services/actions/constructor";
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrop } from "react-dnd";
+import FixingsContainer from '../fixings-containter/fixings-container';
 
-const BurgerConstructor = ({ onOrderClick }) => {
+const BurgerConstructor = () => {
 
-    const constructorContext = useContext(BurgerIngredientsContext);
-    
-    const bun = constructorContext.order.find(el => el.type === 'bun');
-    const fixings = constructorContext.order.filter(el => el.type !== 'bun');
+    const { bun, fixings, totalPrice, productsIds } = useSelector(store => store.burgerConstructor);
+    const dispatch = useDispatch();
 
-    const order = useMemo(() => {
-        return {
-            bun,
-            fixings
-        }
-    }, [constructorContext]);
-
-    const initialTotalPrice = 0;
-
-    const reducer = (state, action) => {
-        switch (action.type) {
-            case "update":
-                return order.fixings.reduce((sum, currentItem) => sum + currentItem.price, order.bun.price * 2);
-            default:
-                throw new Error(`Unsupported type of action: ${action.type}`);
-        }
+    const onOrderClick = (ids) => {
+        dispatch(sendOrder(ids));
     }
 
-    const [totalPrice, dispatch] = useReducer(reducer, initialTotalPrice);
+    const [{isHover}, drop] = useDrop({
+        accept: "ingredient",
+        drop(item) {
+            dispatch(addItem(item));
+        },
+        collect: monitor => ({
+            isHover: monitor.isOver(),
+        })
+    });
 
-    //calculate total price
-    useEffect(() => dispatch({ type: "update"}), [order]);
+    const handleDelete = (item) => {
+        dispatch(removeItem(item));
+    }  
 
     return (
         <section className={`${constructorStyles.container} pt-25 pl-4 pr-4 pb-10`}>
-            <ul className={`${constructorStyles.list} `}>
-                <li key={`${order.bun._id}top`} className={` pl-8 mb-4 pr-4`}>
+            <ul className={`${isHover ? constructorStyles.dropTarget : constructorStyles.list}`} ref={drop} >
+                {!bun && fixings.length === 0 && <h2 className="text text_type_main-medium">Выбранные ингредиенты</h2>}
+               { bun && <li key={`${bun._id}top`} className={` pl-8 mb-4 pr-4`}>
                     <ConstructorElement
                         type='top'
                         isLocked={true}
-                        text={`${order.bun.name} (верх)`}
-                        price={order.bun.price}
-                        thumbnail={order.bun.image_mobile}
+                        text={`${bun.name} (верх)`}
+                        price={bun.price}
+                        thumbnail={bun.image_mobile}
                     />
-                </li>
+                </li> }
                 <div className={`${constructorStyles.fixings} pr-2`}>
-                    {
-                        order.fixings.map((item, index) =>
-                            <li key={index} className={`${constructorStyles.listElement} mb-4`}>
-                                <span className={constructorStyles.dragIcon}>
-                                <DragIcon type="primary" />
-                                </span>
-                                <ConstructorElement
-                                    text={item.name}
-                                    price={item.price}
-                                    thumbnail={item.image_mobile}
-                                />
-                            </li>
+                {   fixings && fixings.length > 0 && 
+                        fixings.map((item, index) =>
+                        <FixingsContainer
+                        key={item.uId}
+                        item={item}
+                        index={index}
+                        handleDelete={handleDelete} />
                         )
-                    }
-                </div>
-                <li key={`${order.bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
+                    }               
+                </div>               
+                { bun && <li key={`${bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
                     <ConstructorElement
                         type='bottom'
                         isLocked={true}
-                        text={`${order.bun.name} (низ)`}
-                        price={order.bun.price}
-                        thumbnail={order.bun.image_mobile}
+                        text={`${bun.name} (низ)`}
+                        price={bun.price}
+                        thumbnail={bun.image_mobile}
                     />
-                </li>
+                </li> }
             </ul>
             <div className={`${constructorStyles.finalize} mt-10 pr-5`}>
                 <p className='text text_type_digits-medium mr-3'>{totalPrice} </p>
                 <img src={currency} alt="currency" className='mr-10'/>
-                <Button type='primary' size='medium' onClick={onOrderClick}>Оформить заказ</Button>
+                <Button type='primary' size='medium' onClick={() => onOrderClick(productsIds)}>Оформить заказ</Button>
             </div>
         </section>
     );
 }
 
-BurgerConstructor.propTypes = {
-    onOrderClick: PropTypes.func.isRequired
-}
 
 export default BurgerConstructor
