@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, Route } from "react-router-dom";
 import styles from './profile.module.css';
-import ProfileForm from "../../components/profile-form/profile-form";
+import { ProfileForm } from "../../components/profile-form/profile-form";
 
 export const ProfilePage = () => (
   <main className={styles.wrapper}>
@@ -47,7 +47,7 @@ export const ProfilePage = () => (
       <ProfileForm />
     </Route>
     <Route path="/profile/orders" exact>
-      <span className="text text_type_main-default">Скоро здесь будет лента заказов...</span>
+      <span className="text text_type_main-default">Скоро здесь будет «История заказов»...</span>
     </Route>
   </main>
 );
