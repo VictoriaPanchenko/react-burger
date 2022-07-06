@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useCallback } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import {
   Input,
@@ -6,23 +7,61 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css';
+import { resetPassword, clearPwdResetErr } from '../../services/actions/user';
+import Notification from "../../components/notification/notification";
 
 export const ResetPasswordPage = () => {
+
+  const { user, errMessage, passwordResetRequest, passwordResetErr, isPasswordReset } = useSelector(
+    (store) => store.user
+  );
+
+  const [token, setToken] = useState('');
   const [password, setPassword] = useState("");
-  const [code, setCode] = useState("");
-  const inputRef = useRef(null);
+  
+  
+  const dispatch = useDispatch();
+  const location = useLocation();
 
   const onPasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
   const onCodeChange = (e) => {
-    setCode(e.target.value);
+    setToken(e.target.value);
   };
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch(resetPassword(password, token));
+    },
+    [dispatch, password, token]
+  );
+
+  const resetError = useCallback(() => {
+    dispatch(clearPwdResetErr());
+  }, [dispatch]);
+
+  if (user) {
+    return <Redirect to={location.state?.from || '/'} />;
+  }
+
+  if (isPasswordReset) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/login',
+        }}
+      />
+    );
+  }
 
   return (
     <main className={styles.wrapper}>
-      <form className={styles.form}>
+       {!passwordResetRequest && !passwordResetErr && (
+      <>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <h1
           className={`${styles.title} text text_type_main-medium mb-6`}
         >
@@ -42,7 +81,6 @@ export const ResetPasswordPage = () => {
             value={code}
             name="e-mail"
             error={false}
-            ref={inputRef}
             errorText="Ошибка"
             size="default"
           />
@@ -57,6 +95,16 @@ export const ResetPasswordPage = () => {
           Войти
         </Link>
       </p>
+      </>
+      )}
+      {!passwordResetRequest && passwordResetErr && (
+        <Notification
+          title='Произошла ошибка.'
+          message={errMessage}
+          onClose={resetError}
+          backHome
+        />
+      )}
     </main>
   );
 };

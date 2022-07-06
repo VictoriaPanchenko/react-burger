@@ -1,6 +1,6 @@
 import { useContext, useState, createContext } from 'react';
 import {getUserRequest, loginRequest } from './api';
-import { setCookie, deleteCookie } from './utils';
+import { setCookie, deleteCookie } from './cookie-setting';
 
 const fakeAuth = {
     isAuthenticated: false,
