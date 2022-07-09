@@ -1,4 +1,4 @@
-import { ADD, DELETE, CHANGE_ORDER } from '../actions/constructor';
+import { ADD, DELETE, CHANGE_ORDER, CLEAR_CONSTRUCTOR } from '../actions/constructor';
 import update from 'immutability-helper';
 
 const initialState = {
@@ -33,7 +33,7 @@ export const constructorReducer = (state = initialState, action) => {
             //fixings
             return {
                 ...state,
-                fixings: [...state.fixings, action.item ],
+                fixings: [...state.fixings, action.item],
                 productsIds: [...state.productsIds, action.item._id],
                 totalPrice: state.totalPrice + action.item.price,
             };
@@ -53,9 +53,13 @@ export const constructorReducer = (state = initialState, action) => {
                     $splice: [
                         [action.dragIndex, 1],
                         [action.hoverIndex, 0, state.fixings[action.dragIndex]],
-                      ]
+                    ]
                 })
             }
+
+        case RESET:
+            return $initialState;
+
 
         default:
             return state;

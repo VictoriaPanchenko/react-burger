@@ -1,4 +1,4 @@
-import { sendEmailToRestorePassword, updatePassword, registerNewUser, getUserInfo, updateUserInfo, login, logout, refreshToken } from '../../api/api-requests';
+import { sendEmailToRestorePassword, updatePassword, registerNewUser, getUserInfo, updateUserInfo, login, logout, refreshToken as refreshTokenServer } from '../../api/api-requests';
 import { setCookie, deleteCookie } from '../cookie-setting';
 
 export const REGISTR_USER_REQUEST = 'REGISTR_USER_REQUEST';
@@ -129,8 +129,7 @@ export const patchUser = (accessToken, name, email, password, refreshToken) => {
         throw new Error('Token does not exist in storage');
       } else {
         dispatch({ type: REFRESH_TOKEN_REQUEST });
-        api
-          .refreshToken(refreshToken)
+        refreshTokenServer(refreshToken)
           .then((res) => {
             setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
             localStorage.setItem('refreshToken', res.refreshToken);
@@ -173,7 +172,7 @@ export const checkAuth = (accessToken, refreshToken) => {
     return function (dispatch) {
       dispatch({ type: CHECK_AUTH });
       if (!!accessToken) {
-        dispatch(getUserInfo(accessToken, refreshToken));
+        dispatch(getUser(accessToken, refreshToken));
       }
   
       dispatch({ type: CHECK_AUTH_CHECKED });
