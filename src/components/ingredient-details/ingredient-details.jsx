@@ -1,12 +1,27 @@
+import React, { useEffect } from 'react';
 import detailStyles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from "react-router-dom";
+import { getIngredients } from '../../services/actions/ingredients';
 
 const IngredientDetails = () => {
+    const dispatch = useDispatch();
 
-    const {selectedIngredient} = useSelector(s => s.itemDetail);
+    useEffect(() => {
+        dispatch(getIngredients());
+    }, [dispatch]);
 
+    const { id } = useParams();
+    const { ingredients, ingredientsRequest } = useSelector(store => store.ingredients);
+    const selectedIngredient = ingredients.find(item => item._id === id);
+
+    if(ingredientsRequest || ingredients.length === 0){
+        return (
+            <div>Loading...</div>
+        )
+    }
     return (
-
+ 
         <div className={detailStyles.container}>
             <img src={selectedIngredient.image_large} alt={selectedIngredient.name} />
             <p className='text text_type_main-medium mb-8'>{selectedIngredient.name}</p>

@@ -4,7 +4,8 @@ import { RegisterPage } from './register/register';
 import { ForgotPasswordPage } from './forgot-password/forgot-password';
 import { ResetPasswordPage } from './reset-password/reset-password';
 import { NotFoundPage } from './page-not-found/not-found';
+import { IngredientPage } from './ingredient/ingredient';
 
 export {
-  ProfilePage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, NotFoundPage,
+  ProfilePage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, NotFoundPage, IngredientPage
 };

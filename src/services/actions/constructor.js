@@ -33,6 +33,6 @@ export function changeOrder(dragIndex, hoverIndex) {
 
 export function clearConstructor() {
   return {
-    type: CLEAR,
+    type: CLEAR_CONSTRUCTOR,
   };
 }

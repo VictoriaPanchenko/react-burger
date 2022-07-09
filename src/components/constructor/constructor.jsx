@@ -13,7 +13,7 @@ import MainContent from '../main-content/main-content';
 import { getIngredients } from '../../services/actions/ingredients';
 import { closeOrderModal } from '../../services/actions/order';
 import { closeDetailModal } from '../../services/actions/ingredient-detail';
-import { LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFoundPage } from '../../pages';
+import { LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFoundPage, IngredientPage } from '../../pages';
 import { checkAuth } from '../../services/actions/user';
 import { clearConstructor } from '../../services/actions/constructor';
 
@@ -22,13 +22,13 @@ export const Constructor = () => {
         orderFailed,
         orderNumber } = useSelector(store => store.order);
 
+    const { isDetailOpened: openDetailPopUp } = useSelector(store => store.itemDetail);
+
     const accessToken = getCookie('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
     const dispatch = useDispatch();
 
-    const location = useLocation();
-    const background = location.state && location.state.background;
     const history = useHistory();
 
     const closeIngredientDetailModal = useCallback(
@@ -56,16 +56,16 @@ export const Constructor = () => {
     );
 
     const modalDetail = (
-        <Route path="/ingredients/:id">
-        <Modal title='Детали ингредиента' onClose={() => closeIngredientDetailModal('/')}>
-            <IngredientDetails />
-        </Modal>
+        <Route exact path="/ingredients/:id">
+            <Modal title='Детали ингредиента' onClose={() => closeIngredientDetailModal('/')}>
+                <IngredientDetails />
+            </Modal>
         </Route>
     );
 
     return (
         <div className={`${styles.constructor} mb-10`}>
-            <Switch location={background || location}>
+            <Switch>
                 <Route exact path="/">
                     <MainContent />
                 </Route>
@@ -78,9 +78,14 @@ export const Constructor = () => {
                 <Route exact path="/forgot-password">
                     <ForgotPasswordPage />
                 </Route>
-                <Route exact path="/ingredients/:id">
-                    <IngredientDetails title="Детали ингредиента" />
-                </Route>
+                {
+                    !openDetailPopUp &&
+                    <Route exact path="/ingredients/:id">
+
+                        <IngredientPage />
+
+                    </Route>
+                }
                 <Route exact path="/reset-password">
                     <ResetPasswordPage />
                 </Route>
@@ -93,7 +98,7 @@ export const Constructor = () => {
             </Switch>
 
             {
-                background && modalDetail
+                openDetailPopUp && modalDetail
             }
 
             {

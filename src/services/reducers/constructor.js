@@ -57,9 +57,8 @@ export const constructorReducer = (state = initialState, action) => {
                 })
             }
 
-        case RESET:
-            return $initialState;
-
+        case CLEAR_CONSTRUCTOR:
+            return initialState;
 
         default:
             return state;
