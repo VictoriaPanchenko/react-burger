@@ -43,9 +43,6 @@ export const ProfileForm = () => {
       setEmail(user.email);
       setName(user.name);
       setPassword('');
-      setHasEmailErr(false);
-      setHasNameErr(false);
-      setHasPasswordErr(false);
       setIsDataChanged(false);
     },
     [user.name, user.email]

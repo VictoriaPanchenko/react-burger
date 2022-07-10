@@ -22,9 +22,6 @@ export const ProfilePage = () => {
     history.replace({ path: '/login' });
   }, [dispatch, logoutUser, history, refreshToken]);
 
-  const clearErrorMsg = useCallback(() => {
-    dispatch(clearPatchUserErr());
-  }, [dispatch]);
 
 
   return (
@@ -69,9 +66,9 @@ export const ProfilePage = () => {
         </p>
       </nav>
       <Route path="/profile" exact>
-      {!patchUserRequest && !patchUserFailed && (
+      
         <ProfileForm />
-      )}
+      
  </Route>
       
 
