@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import {
-    Switch, Route, useLocation, useHistory,
+    Switch, Route, useHistory,
 } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCookie } from '../../services/cookie-setting';
@@ -18,9 +18,7 @@ import { checkAuth } from '../../services/actions/user';
 import { clearConstructor } from '../../services/actions/constructor';
 
 export const Constructor = () => {
-    const { orderRequest,
-        orderFailed,
-        orderNumber } = useSelector(store => store.order);
+    const { orderNumber } = useSelector(store => store.order);
 
     const { isDetailOpened: openDetailPopUp } = useSelector(store => store.itemDetail);
 
@@ -77,15 +75,14 @@ export const Constructor = () => {
                 </Route>
                 <Route exact path="/forgot-password">
                     <ForgotPasswordPage />
-                </Route>
-                {
-                    !openDetailPopUp &&
+                </Route>                
                     <Route exact path="/ingredients/:id">
-
+                    {
+                    !openDetailPopUp &&
                         <IngredientPage />
-
+                    }
                     </Route>
-                }
+               
                 <Route exact path="/reset-password">
                     <ResetPasswordPage />
                 </Route>
