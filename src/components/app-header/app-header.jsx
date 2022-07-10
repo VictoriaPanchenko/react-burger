@@ -1,12 +1,11 @@
 import React from "react";
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import appHeaderStyles from './app-header.module.css';
 
 const AppHeader = () => {
 
-    const { pathname } = useLocation();
     const { user } = useSelector(store => store.user);
 
 
@@ -48,10 +47,10 @@ const AppHeader = () => {
                         activeClassName={appHeaderStyles.linkActive}
                         className={`${appHeaderStyles.link} text text_type_main-default`}
                         exact
-                        to="/profile/orders"
+                        to="/profile"
                     >
                         <ProfileIcon type='secondary' />
-                        <p className="text text_type_main-default ml-2">Личный кабинет</p>
+                        <p className="text text_type_main-default ml-2">{user ? user.name : 'Личный кабинет'}</p>
                     </NavLink>
                 </div>
             </nav>
