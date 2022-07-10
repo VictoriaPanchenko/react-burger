@@ -14,7 +14,7 @@ export const getUserInfo = (accessToken) => {
   }
 
   export const updateUserInfo = (accessToken, name, email, password) => {
-    return fetch(`${this._baseUrl}/auth/user`, {
+    return fetch(`${baseUrl}/auth/user`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
