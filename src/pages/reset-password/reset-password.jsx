@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import {
@@ -9,6 +9,7 @@ import {
 import styles from './reset-password.module.css';
 import { resetPassword, clearPwdResetErr } from '../../services/actions/user';
 import Notification from "../../components/notification/notification";
+import { Redirect, useLocation } from 'react-router-dom';
 
 export const ResetPasswordPage = () => {
 
@@ -19,7 +20,7 @@ export const ResetPasswordPage = () => {
   const [token, setToken] = useState('');
   const [password, setPassword] = useState("");
   
-  
+  const inputRef = useRef(null);
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -78,11 +79,12 @@ export const ResetPasswordPage = () => {
             type="text"
             placeholder="Введите код из письма"
             onChange={onCodeChange}
-            value={code}
+            value={token}
             name="e-mail"
             error={false}
             errorText="Ошибка"
             size="default"
+            ref={inputRef}
           />
         </div>
         <Button type="primary" size="medium">
