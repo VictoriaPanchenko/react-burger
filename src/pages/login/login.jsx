@@ -1,16 +1,31 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Input,
   Button,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
+import { loginUser } from "../../services/actions/user";
 
 export const LoginPage = () => {
+
+  const {user} = useSelector((store) => store.user);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputRef = useRef(null);
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (user) {
+      (location.state && location.state.previousLocation) ? history.push(location.state.previousLocation.pathname) : history.push('/');
+    }
+  }, [user, history, location]);
 
   const onEmailChange = (e) => {
     setEmail(e.target.value);
@@ -20,9 +35,18 @@ export const LoginPage = () => {
     setPassword(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      return;
+    }
+    dispatch(loginUser(email, password));
+  };
+
+
   return (
     <main className={styles.wrapper}>
-      <form className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <h2 className={`${styles.title} text text_type_main-medium`}>
           Вход
         </h2>
