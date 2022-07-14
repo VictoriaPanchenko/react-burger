@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from './services/reducers';
 import { createRoot } from 'react-dom/client';
+import {BrowserRouter} from 'react-router-dom';
 
 
 const composeEnhancers =
@@ -23,11 +24,11 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
+      <BrowserRouter basename="/react-burger">
     <Provider store={store}>
     <App />
     </Provider>
-  </React.StrictMode>
+    </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

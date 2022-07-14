@@ -5,6 +5,7 @@ export const POST_ORDER_SUCCESS = 'POST_ORDER_SUCCESS';
 export const POST_ORDER_FAILED = 'POST_ORDER_FAILED';
 export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
 export const OPEN_ORDER_MODAL = 'OPEN_ORDER_MODAL';
+export const CLEAR_ORDER_ERROR = 'CLEAR_ORDER_ERROR';
 
 export function sendOrder(order) {
     return function (dispatch) {
@@ -19,5 +20,11 @@ export function sendOrder(order) {
   export function closeOrderModal() {
     return {
       type: CLOSE_ORDER_MODAL,
+    };
+  }
+
+  export function clearOrderError() {
+    return {
+      type: CLEAR_ORDER_ERROR,
     };
   }

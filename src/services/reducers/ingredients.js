@@ -1,7 +1,8 @@
 import {
     GET_INGREDIENTS_REQUEST,
     GET_INGREDIENTS_FAILED,
-    GET_INGREDIENTS_SUCCESS    
+    GET_INGREDIENTS_SUCCESS,
+    CLEAR_INGREDIENTS_ERROR
 } from '../actions/ingredients';
 
 const initialState = {
@@ -12,7 +13,7 @@ const initialState = {
 
 export const ingredientsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_INGREDIENTS_REQUEST: 
+        case GET_INGREDIENTS_REQUEST:
             return {
                 ...state,
                 ingredientsRequest: true
@@ -23,14 +24,20 @@ export const ingredientsReducer = (state = initialState, action) => {
                 ingredientsRequest: false,
                 ingredients: action.ingredients,
                 ingredientsFailed: false
-            } 
+            }
         case GET_INGREDIENTS_FAILED:
             return {
                 ...state,
                 ingredientsRequest: false,
                 ingredientsFailed: true
             }
-        default: 
+        case CLEAR_INGREDIENTS_ERROR: {
+            return {
+                ...state,
+                ingredientsFailed: false
+            };
+        }
+        default:
             return state;
     }
 };

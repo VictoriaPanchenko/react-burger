@@ -1,6 +1,7 @@
 import React from "react";
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-constructor.module.css';
+import { useHistory } from 'react-router-dom';
 import currency from '../../images/currency-large.png';
 import { sendOrder } from "../../services/actions/order";
 import { addItem, removeItem } from "../../services/actions/constructor";
@@ -11,10 +12,13 @@ import FixingsContainer from '../fixings-containter/fixings-container';
 const BurgerConstructor = () => {
 
     const { bun, fixings, totalPrice, productsIds } = useSelector(store => store.burgerConstructor);
+    const { user } = useSelector(store => store.user);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const onOrderClick = (ids) => {
-        dispatch(sendOrder(ids));
+        user && dispatch(sendOrder(ids));
+        !user && history.push('/login');
     }
 
     const [{isHover}, drop] = useDrop({

@@ -3,7 +3,8 @@ import {
     POST_ORDER_FAILED,
     POST_ORDER_SUCCESS,
     CLOSE_ORDER_MODAL,
-    OPEN_ORDER_MODAL
+    OPEN_ORDER_MODAL,
+    CLEAR_ORDER_ERROR
 } from '../actions/order';
 
 const initialState = {
@@ -31,7 +32,7 @@ export const orderReducer = (state = initialState, action) => {
                 ...state,
                 orderRequest: false,
                 orderFailed: false,
-                orderNumber: action.orderNumber                
+                orderNumber: action.orderNumber
             };
         case CLOSE_ORDER_MODAL:
             return {
@@ -43,8 +44,13 @@ export const orderReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isOrderModalOpened: true
-            }; 
-        
+            };
+        case CLEAR_ORDER_ERROR: {
+            return {
+                ...state,
+                orderFailed: false,
+            };
+        }
         default:
             return state;
     }

@@ -1,0 +1,7 @@
+.constructor {
+    display: flex;
+    flex: 1;
+    gap: 40px;
+    padding: 0;
+    box-sizing: border-box;
+  }

@@ -5,9 +5,11 @@ import ingredientItemPropType from '../../utils/custom-prop-types';
 import { setPickedIngredient } from '../../services/actions/ingredient-detail';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrag } from "react-dnd";
+import { useHistory } from 'react-router-dom';
 
 const IngredientsItem = ({ item }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const { bun, fixings } = useSelector(store => store.burgerConstructor);
 
@@ -33,7 +35,10 @@ const IngredientsItem = ({ item }) => {
       const className = `${isDrag ? itemStyles.isDragging : ''} pl-4 pr-4`;
 
     return(
-        <article draggable ref={drag} className={itemStyles.card} onClick={() => dispatch(setPickedIngredient(item))}>
+        <article draggable ref={drag} className={itemStyles.card} onClick={() => {
+            dispatch(setPickedIngredient(item));
+            history.push(`/ingredients/${item._id}`);
+        }}>
             {counter > 0 && <Counter count={counter} size="default"/> }
             <img className={className} src={item.image} alt={item.name} />
             <p className={`${itemStyles.price} text text_type_digits-default mt-1 mb-1`}>{item.price} <CurrencyIcon/></p>
