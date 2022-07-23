@@ -9,10 +9,10 @@ import { useInView } from 'react-intersection-observer';
 
 const BurgerIngredients = () => {
 
-    const { ingredients } = useSelector(store => store.ingredients);
-    const buns = ingredients.filter((ingredient) => ingredient.type === categories.Bun.type);
-    const fixings = ingredients.filter((ingredient) => ingredient.type === categories.Main.type);
-    const sauces = ingredients.filter((ingredient) => ingredient.type === categories.Sauce.type);
+    const { ingredientsArray } = useSelector(store => store.ingredients);
+    const buns = ingredientsArray.filter((ingredient) => ingredient.type === categories.Bun.type);
+    const fixings = ingredientsArray.filter((ingredient) => ingredient.type === categories.Main.type);
+    const sauces = ingredientsArray.filter((ingredient) => ingredient.type === categories.Sauce.type);
 
     const [currentTab, setCurrentTab] = useState('bun');
 

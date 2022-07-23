@@ -6,7 +6,7 @@ import {
 } from '../actions/ingredients';
 
 const initialState = {
-    ingredients: [],
+    ingredientsArray: [],
     ingredientsRequest: false,
     ingredientsFailed: false,
 };

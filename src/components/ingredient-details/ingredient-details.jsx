@@ -12,10 +12,10 @@ const IngredientDetails = () => {
     }, [dispatch]);
 
     const { id } = useParams();
-    const { ingredients, ingredientsRequest } = useSelector(store => store.ingredients);
-    const selectedIngredient = ingredients.find(item => item._id === id);
+    const { ingredientsArray, ingredientsRequest } = useSelector(store => store.ingredients);
+    const selectedIngredient = ingredientsArray.find(item => item._id === id);
 
-    if(ingredientsRequest || ingredients.length === 0){
+    if(ingredientsRequest || ingredientsArray.length === 0){
         return (
             <div>Loading...</div>
         )
