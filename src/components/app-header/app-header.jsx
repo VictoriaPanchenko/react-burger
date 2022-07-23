@@ -31,7 +31,7 @@ const AppHeader = () => {
                                 activeClassName={appHeaderStyles.linkActive}
                                 className={`${appHeaderStyles.link} text text_type_main-default`}
                                 exact
-                                to="/profile/orders"
+                                to="/feed"
                             >
                                 <ListIcon type='secondary' />
                                 <p className="text text_type_main-default ml-2">Лента заказов</p>
