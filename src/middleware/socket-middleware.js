@@ -5,7 +5,7 @@ export const socketMiddleware = (wsUrl, wsActions) => (store) => {
     const { dispatch } = store;
     const { type, payload } = action;
     const {
-      wsInit, onOpen, onClose, onError, onMessage, wsClose, wsInitWithToken,
+      wsInit, onOpen, onClose, onError, onMessage, wsInitWithToken
     } = wsActions;
     if (type === wsInit) {
       // объект класса WebSocket
@@ -16,9 +16,9 @@ export const socketMiddleware = (wsUrl, wsActions) => (store) => {
       socket = new WebSocket(payload);
     }
 
-    if (type === wsClose) {
-      socket.close();
-    }
+    if (type === onClose) {
+        socket.close(1000, 'CLOSE_DONE');
+      }
 
     // функция, которая вызывается при открытии сокета
     if (socket) {

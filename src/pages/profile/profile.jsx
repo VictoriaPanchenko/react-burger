@@ -31,7 +31,7 @@ export const ProfilePage = () => {
         <ul className={styles.list}>
           <li>
             <NavLink
-              activeClassName={styles.link_active}
+              activeclassname={styles.link_active}
               className={`${styles.link} text text_type_main-medium`}
               to="/profile"
               exact
@@ -41,7 +41,7 @@ export const ProfilePage = () => {
           </li>
           <li>
             <NavLink
-              activeClassName={styles.link_active}
+              activeclassname={styles.link_active}
               className={`${styles.link} text text_type_main-medium`}
               exact
               to="/profile/orders"
@@ -51,7 +51,7 @@ export const ProfilePage = () => {
           </li>
           <li>
             <button
-              activeClassName={styles.link_active}
+              activeclassname={styles.link_active}
               className={`${styles.link} text text_type_main-medium`}
               onClick={handleLogout}
             >

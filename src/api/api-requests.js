@@ -1,4 +1,4 @@
-const baseUrl = 'https://norma.nomoreparties.space/api';
+import { baseUrl } from "../utils/constants";
 
 const checkResponse = (res) => {
     return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
@@ -87,15 +87,20 @@ export const getInitialIngredients = () => {
         .then(res => checkResponse(res))
 }
 
-export const postOrder = (productIds) => {
+export const postOrder = (accessToken, productIds) => {
     return fetch(`${baseUrl}/orders`, {
         headers: {
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+            authorization: accessToken,
         },
         method: 'POST',
         body: JSON.stringify({ ingredients: productIds })
     })
         .then(checkResponse)
+}
+
+export const getOrderInfo = (orderNumber) => {
+  return fetch(`${baseUrl}/orders/${orderNumber}`).then(checkResponse);
 }
 
 export const sendEmailToRestorePassword = (email) => {

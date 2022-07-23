@@ -7,10 +7,10 @@ export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
 export const OPEN_ORDER_MODAL = 'OPEN_ORDER_MODAL';
 export const CLEAR_ORDER_ERROR = 'CLEAR_ORDER_ERROR';
 
-export function sendOrder(order) {
+export function sendOrder(accessToken, order) {
     return function (dispatch) {
       dispatch({ type: POST_ORDER_REQUEST });
-      postOrder(order)
+      postOrder(accessToken, order)
         .then(res => dispatch({ type: POST_ORDER_SUCCESS, orderNumber: res.order.number }))
         .catch(() => dispatch({ type: POST_ORDER_FAILED }))
         .finally(() => dispatch({type: OPEN_ORDER_MODAL}));
