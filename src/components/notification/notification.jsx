@@ -4,11 +4,22 @@ import styles from './notification.module.css';
 import { CloseIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearPwdRecoverErr, clearPwdResetErr } from '../../services/actions/user';
 
 const rootNotifications = document.getElementById('notifications');
 
 const Notification = ({ heading, message, onRepeatRequest, onClose, backHome }) => {
   const containerRef = useRef(null);
+  
+
+  const dispatch = useDispatch();
+  const cleanError = () => {
+    dispatch(clearPwdRecoverErr());
+    dispatch(clearPwdResetErr());
+    onClose && onClose();
+    containerRef.current.classList.add(styles.notification_closed);
+  };
 
   const closeNotification = () => {
     onClose && onClose();
@@ -32,14 +43,12 @@ const Notification = ({ heading, message, onRepeatRequest, onClose, backHome }) 
           </Button>
         )}
         {backHome && (
-          <Link className={`${styles.notification__homeLink} text text_type_main-default`} to={'/'}>
+          <Link onClick={() => cleanError()} className={`${styles.notification__homeLink} text text_type_main-default`} to={'/'}>
             Вернуться на главную
           </Link>
         )}
       </div>
-      <button className={styles.notification__closeBtn} onClick={() => closeNotification()}>
-        <CloseIcon type='secondary' />
-      </button>
+      
     </div>,
     rootNotifications
   );

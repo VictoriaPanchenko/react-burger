@@ -116,7 +116,7 @@ export const sendEmailToRestorePassword = (email) => {
 }
 
 export const updatePassword = (password, token) => {
-    return fetch(`${baseUrl}/password-reset`, {
+    return fetch(`${baseUrl}/password-reset/reset`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

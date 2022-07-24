@@ -101,7 +101,7 @@ export const ResetPasswordPage = () => {
       )}
       {!passwordResetRequest && passwordResetErr && (
         <Notification
-          title='Произошла ошибка.'
+          heading='Произошла ошибка.'
           message={errMessage}
           onClose={resetError}
           backHome
