@@ -5,6 +5,7 @@ import styles from './profile.module.css';
 import { ProfileForm } from "../../components/profile-form/profile-form";
 import { logoutUser, clearPatchUserErr } from "../../services/actions/user";
 import { useSelector } from "react-redux";
+import { OrdersHistory } from "../orders-history/orders-history";
 
 export const ProfilePage = () => {
 
@@ -31,7 +32,7 @@ export const ProfilePage = () => {
         <ul className={styles.list}>
           <li>
             <NavLink
-              activeclassname={styles.link_active}
+              activeClassName={styles.link_active}
               className={`${styles.link} text text_type_main-medium`}
               to="/profile"
               exact
@@ -41,7 +42,7 @@ export const ProfilePage = () => {
           </li>
           <li>
             <NavLink
-              activeclassname={styles.link_active}
+              activeClassName={styles.link_active}
               className={`${styles.link} text text_type_main-medium`}
               exact
               to="/profile/orders"
@@ -51,7 +52,7 @@ export const ProfilePage = () => {
           </li>
           <li>
             <button
-              activeclassname={styles.link_active}
+              activeClassName={styles.link_active}
               className={`${styles.link} text text_type_main-medium`}
               onClick={handleLogout}
             >
@@ -73,7 +74,7 @@ export const ProfilePage = () => {
       
 
       <Route path="/profile/orders" exact>
-        <span className="text text_type_main-default">Скоро здесь будет «История заказов»...</span>
+        <OrdersHistory />
       </Route>
     </main>
   )

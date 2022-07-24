@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from 'react-router-dom';
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./orders-component.module.css";
 import { formatDate } from "../../utils/helpers";
+import { useDispatch } from 'react-redux';
+import { openOrderDetailModal } from "../../services/actions/order";
 
 export const OrdersComponent = ({ order, isHistory = false }) => {
+
+  const dispatch = useDispatch();
+
+  const openModal = useCallback(() => {
+    dispatch(openOrderDetailModal());
+  }, [dispatch, openOrderDetailModal]);
+
+
+
   const location = useLocation();
   const {
     status, number, createdAt, name, ingredients,
@@ -16,7 +27,7 @@ export const OrdersComponent = ({ order, isHistory = false }) => {
 
   const checkStatus = (condition) => {
     if (condition === 'done') {
-      return 'Создан';
+      return 'Выполнен';
     }
   };
 
@@ -40,6 +51,7 @@ export const OrdersComponent = ({ order, isHistory = false }) => {
           pathname: `${location.pathname}/${number}`,
           state: { background: location },
         }}
+        onClick={openModal}
       >
 
         <div className={styles.header}>
@@ -47,9 +59,9 @@ export const OrdersComponent = ({ order, isHistory = false }) => {
           <p className="text text_type_main-default text_color_inactive">{formatDate(createdAt)}</p>
         </div>
 
-        <h2 className="text text_type_main-medium">{name}</h2>
+        <h2 className="text text_type_main-medium" style={{ textAlign: "left" }} >{name}</h2>
         {
-          (status && isHistory) && <p className="text text_type_main-default">{checkStatus(status)}</p>
+          (status && isHistory) && <p className="text text_type_main-default" style={{ textAlign: "left" }} >{checkStatus(status)}</p>
         }
 
         <div className={styles.footer}>

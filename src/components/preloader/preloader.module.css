@@ -1,7 +1,11 @@
 .preloader {
+  position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     margin: auto;
-    height: 60px;
-    width: 60px;
+    height: 150px;
+    width: 150px;
     border-left: 6px solid  #ffffff;
     border-bottom: 6px solid  #ffffff;
     border-right: 6px solid  #ffffff;

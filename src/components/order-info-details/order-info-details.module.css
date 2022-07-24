@@ -9,13 +9,18 @@
     width: 100%;
     max-width: 640px;
     padding: 40px 0;
+    text-align: start;
   }
   
   .order_number {
     width: 100%;
-    text-align: start;
+    text-align: center;
   }
-  
+
+  .order_status {
+    color: #00CCCC;
+  }
+
   .currency_container {
     display: flex;
     align-items: center;

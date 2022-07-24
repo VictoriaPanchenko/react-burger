@@ -4,14 +4,17 @@ import {
     POST_ORDER_SUCCESS,
     CLOSE_ORDER_MODAL,
     OPEN_ORDER_MODAL,
-    CLEAR_ORDER_ERROR
+    CLEAR_ORDER_ERROR,
+    OPEN_ORDER_DETAIL_MODAL,
+    CLOSE_ORDER_DETAIL_MODAL
 } from '../actions/order';
 
 const initialState = {
     orderRequest: false,
     orderFailed: false,
     orderNumber: null,
-    isOrderModalOpened: false
+    isOrderModalOpened: false,
+    isOrderDetailModalOpened: false
 }
 
 export const orderReducer = (state = initialState, action) => {
@@ -51,6 +54,16 @@ export const orderReducer = (state = initialState, action) => {
                 orderFailed: false,
             };
         }
+        case CLOSE_ORDER_DETAIL_MODAL:
+            return {
+                ...state,
+                isOrderDetailModalOpened: false
+            };
+        case OPEN_ORDER_DETAIL_MODAL:
+            return {
+                ...state,
+                isOrderDetailModalOpened: true
+            };
         default:
             return state;
     }

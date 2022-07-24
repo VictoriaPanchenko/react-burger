@@ -7,6 +7,7 @@ import { sendOrder } from "../../services/actions/order";
 import { addItem, removeItem } from "../../services/actions/constructor";
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from "react-dnd";
+import { getCookie } from "../../services/cookie-setting";
 import FixingsContainer from '../fixings-containter/fixings-container';
 
 const BurgerConstructor = () => {
@@ -15,9 +16,10 @@ const BurgerConstructor = () => {
     const { user } = useSelector(store => store.user);
     const dispatch = useDispatch();
     const history = useHistory();
+    const accessToken = getCookie('accessToken');
 
     const onOrderClick = (ids) => {
-        user && dispatch(sendOrder(ids));
+        user && dispatch(sendOrder(`Bearer ${accessToken}`, ids));
         !user && history.push('/login');
     }
 
