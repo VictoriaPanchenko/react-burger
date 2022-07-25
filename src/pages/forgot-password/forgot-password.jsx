@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useLocation, Link } from "react-router-dom";
+import { Redirect, useLocation, Link, useHistory } from "react-router-dom";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./forgot-password.module.css";
-import { sendRecoverPasswordEmail, clearPwdRecoverErr } from '../../services/actions/user';
+import { sendRecoverPasswordEmail, clearPwdRecoverErr, resetPasswordRecoverPageToInitial } from '../../services/actions/user';
 import Notification from "../../components/notification/notification";
 
 export const ForgotPasswordPage = () => {
@@ -14,6 +14,7 @@ export const ForgotPasswordPage = () => {
   const { user, passwordRecoverRequest, passwordRecoverErr, canResetPassword, errMessage } =
     useSelector((store) => store.user);
 
+  const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
   const handleSubmit = useCallback(
@@ -23,6 +24,14 @@ export const ForgotPasswordPage = () => {
     },
     [dispatch, email]
   );
+
+  useEffect(() => {
+		if (canResetPassword) {
+			dispatch(resetPasswordRecoverPageToInitial());
+			history.push("/reset-password");
+		}
+	}, [canResetPassword, dispatch, history]);
+
 
   const onEmailChange = (e) => {
     setEmail(e.target.value);
@@ -35,17 +44,6 @@ export const ForgotPasswordPage = () => {
   if (user) {
     return <Redirect to={location.state?.from || '/'} />;
   }
-
-  if (canResetPassword) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/reset-password',
-        }}
-      />
-    );
-  }
-
 
   return (
     <main className={styles.wrapper}>

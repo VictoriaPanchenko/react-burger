@@ -6,11 +6,13 @@ export const REGISTR_USER_SUCCESS = 'REGISTR_USER_SUCCESS';
 export const REGISTR_USER_FAILED = 'REGISTR_USER_FAILED';
 export const CLEAR_REGISTER_ERR = 'CLEAR_REGISTER_ERR';
 
+export const PWD_RECOVER_INITIAL = 'PWD_RECOVER_INITIAL';
 export const PWD_RECOVER_REQUEST = 'PWD_RECOVER_REQUEST';
 export const PWD_RECOVER_FAILED = 'PWD_RECOVER_FAILED';
 export const PWD_RECOVER_SUCCESS = 'PWD_RECOVER_SUCCESS';
 export const CLEAR_PWD_RECOVER_ERR = 'CLEAR_PWD_RECOVER_ERR';
 
+export const PWD_RESET_INITIAL = 'PWD_RESET_INITIAL';
 export const PWD_RESET_REQUEST = 'PWD_RESET_REQUEST';
 export const PWD_RESET_SUCCESS = 'PWD_RESET_SUCCESS';
 export const PWD_RESET_FAILED = 'PWD_RESET_FAILED';
@@ -44,6 +46,17 @@ export const CLEAR_REFRESH_TOKEN_ERR = 'CLEAR_REFRESH_TOKEN_ERR';
 export const CHECK_AUTH = 'CHECK_AUTH';
 export const CHECK_AUTH_CHECKED = 'CHECK_AUTH_CHECKED';
 
+export const resetPasswordRecoverPageToInitial = () => {
+	return function (dispatch) {
+		dispatch({ type: PWD_RECOVER_INITIAL });
+	};
+};
+
+export const resetPasswordResetPageToInitial = () => {
+  return function (dispatch) {
+    dispatch({ type: PWD_RESET_INITIAL });
+  };
+};
 
 export const loginUser = (email, password) => {
     return function (dispatch) {

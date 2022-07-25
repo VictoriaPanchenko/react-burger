@@ -1,13 +1,13 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import {
   Input,
   Button,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css';
-import { resetPassword, clearPwdResetErr } from '../../services/actions/user';
+import { resetPassword, clearPwdResetErr, resetPasswordResetPageToInitial  } from '../../services/actions/user';
 import Notification from "../../components/notification/notification";
 import { Redirect, useLocation } from 'react-router-dom';
 
@@ -22,6 +22,7 @@ export const ResetPasswordPage = () => {
   
   const inputRef = useRef(null);
   const dispatch = useDispatch();
+  const history = useHistory();
   const location = useLocation();
 
   const onPasswordChange = (e) => {
@@ -40,22 +41,20 @@ export const ResetPasswordPage = () => {
     [dispatch, password, token]
   );
 
+  useEffect(() => {
+		if (isPasswordReset) {
+			dispatch(resetPasswordResetPageToInitial());
+			history.push("/login");
+		}
+	}, [isPasswordReset, history, dispatch]);
+
+
   const resetError = useCallback(() => {
     dispatch(clearPwdResetErr());
   }, [dispatch]);
 
   if (user) {
     return <Redirect to={location.state?.from || '/'} />;
-  }
-
-  if (isPasswordReset) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/login',
-        }}
-      />
-    );
   }
 
   return (

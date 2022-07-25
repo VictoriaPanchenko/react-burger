@@ -1,8 +1,10 @@
 import {
+    PWD_RECOVER_INITIAL,
     PWD_RECOVER_FAILED,
     PWD_RECOVER_REQUEST,
     PWD_RECOVER_SUCCESS,
     CLEAR_PWD_RECOVER_ERR,
+    PWD_RESET_INITIAL,
     PWD_RESET_REQUEST,
     PWD_RESET_SUCCESS,
     PWD_RESET_FAILED,
@@ -183,6 +185,15 @@ export const userReducer = (state = initialState, action) => {
                 errMessage: '',
             };
         }
+        case PWD_RECOVER_INITIAL: {
+            return {
+                ...state,
+                passwordRecoverRequest: false,
+                passwordRecoverErr: false,
+                canResetPassword: null,
+                errMessage: '',
+            };
+        }
         case PWD_RECOVER_SUCCESS: {
             return {
                 ...state,
@@ -211,6 +222,15 @@ export const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 passwordResetRequest: true,
+                passwordResetErr: false,
+                isPasswordReset: false,
+                errMessage: '',
+            };
+        }
+        case PWD_RESET_INITIAL: {
+            return {
+                ...state,
+                passwordResetRequest: false,
                 passwordResetErr: false,
                 isPasswordReset: false,
                 errMessage: '',
