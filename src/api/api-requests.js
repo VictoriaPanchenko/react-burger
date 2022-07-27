@@ -1,34 +1,35 @@
 import { baseUrl } from "../utils/constants";
+import { setCookie,getCookie } from "../services/cookie-setting";
 
 const checkResponse = (res) => {
-    return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
+  return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
 };
 
-export const getUserInfo = (accessToken) => {
-    return fetch(`${baseUrl}/auth/user`, {
+export const getUserInfo = () => {
+    return  fetchWithRefresh(`${baseUrl}/auth/user`, {
       headers: {
         'Content-Type': 'application/json',
-        authorization: accessToken,
+        authorization: 'Bearer ' + getCookie('accessToken'),
       },
-    }).then(checkResponse);
+    })
   }
 
-  export const updateUserInfo = (accessToken, name, email, password) => {
-    return fetch(`${baseUrl}/auth/user`, {
+  export const updateUserInfo = (name, email, password) => {
+    return  fetchWithRefresh(`${baseUrl}/auth/user`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        authorization: accessToken,
+        authorization: 'Bearer ' + getCookie('accessToken'),
       },
       body: JSON.stringify({
         email: email,
         name: name,
         password: password,
       }),
-    }).then(checkResponse);
+    })
   }
 
-//accessToken (for auth/user), refreshToken
+
 export const registerNewUser = (name, email, password) => {
     return fetch(`${baseUrl}/auth/register`, {
       method: 'POST',
@@ -43,7 +44,7 @@ export const registerNewUser = (name, email, password) => {
     }).then(checkResponse);
   }
 
-//accessToken (for auth/user), refreshToken
+
   export const login = (email, password) => {
     return fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
@@ -57,27 +58,26 @@ export const registerNewUser = (name, email, password) => {
     }).then(checkResponse);
   }
 
-  export const logout = (refreshToken) => {
-    return fetch(`${baseUrl}/auth/logout`, {
+  export const logout = () => {
+    return fetchWithRefresh(`${baseUrl}/auth/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        token: refreshToken
+        token:  localStorage.getItem('refreshToken')
       }),
-    }).then(checkResponse);
+    })
   }
 
-  //accessToken (for auth/user), refreshToken
-  export const refreshToken = (refreshToken) => {
+  export const refreshToken = () => {
     return fetch(`${baseUrl}/auth/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        token: refreshToken
+        token: localStorage.getItem('refreshToken')
       }),
     }).then(checkResponse);
   }
@@ -87,16 +87,15 @@ export const getInitialIngredients = () => {
         .then(res => checkResponse(res))
 }
 
-export const postOrder = (accessToken, productIds) => {
-    return fetch(`${baseUrl}/orders`, {
+export const postOrder = (productIds) => {
+    return fetchWithRefresh(`${baseUrl}/orders`, {
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
-            authorization: accessToken,
+            authorization: 'Bearer ' + getCookie('accessToken'),
         },
         method: 'POST',
         body: JSON.stringify({ ingredients: productIds })
     })
-        .then(checkResponse)
 }
 
 export const getOrderInfo = (orderNumber) => {
@@ -127,3 +126,37 @@ export const updatePassword = (password, token) => {
         }),
     }).then(checkResponse);
 }
+
+async function fetchWithRefresh(url, options) {
+  try {
+    const res = await fetch (url, options);
+    const data = await checkResponse(res);
+    return data;
+  } catch (err) {
+
+    if (!err.success) {
+        const refreshData = await refreshToken();
+      if (!refreshData.success) {
+        return Promise.reject(refreshData);
+      }
+      const accessToken = refreshData.accessToken.split('Bearer ')[1];
+
+      localStorage.setItem('refreshToken', refreshData.refreshToken);
+      setCookie('accessToken', accessToken);
+
+      options.headers.authorization = refreshData.accessToken;
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          authorization: refreshData.accessToken,
+        }
+      });
+
+      const data = await checkResponse(res);
+      return data;
+    } else {
+      return Promise.reject(err);
+    }
+  }
+};

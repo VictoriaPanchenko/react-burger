@@ -9,13 +9,14 @@ export const CLEAR_ORDER_ERROR = 'CLEAR_ORDER_ERROR';
 export const CLOSE_ORDER_DETAIL_MODAL = 'CLOSE_ORDER_DETAIL_MODAL';
 export const OPEN_ORDER_DETAIL_MODAL = 'OPEN_ORDER_DETAIL_MODAL';
 
-export function sendOrder(accessToken, order) {
+export function sendOrder(order) {
     return function (dispatch) {
       dispatch({ type: POST_ORDER_REQUEST });
-      postOrder(accessToken, order)
-        .then(res => dispatch({ type: POST_ORDER_SUCCESS, orderNumber: res.order.number }))
-        .catch(() => dispatch({ type: POST_ORDER_FAILED }))
-        .finally(() => dispatch({type: OPEN_ORDER_MODAL}));
+      postOrder(order)
+        .then(res => {
+          dispatch({ type: POST_ORDER_SUCCESS, orderNumber: res.order.number })
+          dispatch({type: OPEN_ORDER_MODAL})})
+        .catch(() => dispatch({ type: POST_ORDER_FAILED }));
     };
   }
   

@@ -56,9 +56,9 @@ export const Constructor = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(checkAuth(`Bearer ${accessToken}`, refreshToken));
+        dispatch(checkAuth());
         dispatch(getIngredients());
-    }, [dispatch, accessToken, refreshToken]);
+    }, [dispatch]);
 
     const modalOrder = orderNumber && (
         <Modal title='' onClose={closeOrderDetailModal}>

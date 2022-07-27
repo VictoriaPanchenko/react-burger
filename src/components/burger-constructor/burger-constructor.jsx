@@ -16,10 +16,9 @@ const BurgerConstructor = () => {
     const { user } = useSelector(store => store.user);
     const dispatch = useDispatch();
     const history = useHistory();
-    const accessToken = getCookie('accessToken');
 
     const onOrderClick = (ids) => {
-        user && dispatch(sendOrder(`Bearer ${accessToken}`, ids));
+        user && dispatch(sendOrder(ids));
         !user && history.push('/login');
     }
 

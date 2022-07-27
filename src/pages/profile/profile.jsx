@@ -15,13 +15,12 @@ export const ProfilePage = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const refreshToken = localStorage.getItem('refreshToken');
 
   const handleLogout = useCallback(() => {
-    dispatch(logoutUser(refreshToken));
+    dispatch(logoutUser());
 
     history.replace({ path: '/login' });
-  }, [dispatch, logoutUser, history, refreshToken]);
+  }, [dispatch, logoutUser, history]);
 
 
 
