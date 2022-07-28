@@ -8,7 +8,11 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from './services/reducers';
 import { createRoot } from 'react-dom/client';
-import {BrowserRouter} from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { ALL_ORDERS_URL, USER_ORDERS_URL } from './utils/constants';
+import { wsAllOrdersActions, wsUserOrdersActions } from './services/actions/ws';
+import { wsActions } from './services/actions/ws';
+import { socketMiddleware } from './middleware/socket-middleware';
 
 
 const composeEnhancers =
@@ -16,7 +20,10 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancer = composeEnhancers(applyMiddleware(
+  thunk, 
+  socketMiddleware(ALL_ORDERS_URL, wsAllOrdersActions),
+  socketMiddleware(USER_ORDERS_URL, wsUserOrdersActions)));
 
 const store = createStore(rootReducer, enhancer);
 
@@ -24,11 +31,11 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
-      <BrowserRouter basename="/react-burger">
+  <BrowserRouter basename="/react-burger">
     <Provider store={store}>
-    <App />
+      <App />
     </Provider>
-    </BrowserRouter>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

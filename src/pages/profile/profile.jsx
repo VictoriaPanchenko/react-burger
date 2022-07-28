@@ -5,6 +5,7 @@ import styles from './profile.module.css';
 import { ProfileForm } from "../../components/profile-form/profile-form";
 import { logoutUser, clearPatchUserErr } from "../../services/actions/user";
 import { useSelector } from "react-redux";
+import { OrdersHistory } from "../orders-history/orders-history";
 
 export const ProfilePage = () => {
 
@@ -14,13 +15,12 @@ export const ProfilePage = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const refreshToken = localStorage.getItem('refreshToken');
 
   const handleLogout = useCallback(() => {
-    dispatch(logoutUser(refreshToken));
+    dispatch(logoutUser());
 
     history.replace({ path: '/login' });
-  }, [dispatch, logoutUser, history, refreshToken]);
+  }, [dispatch, logoutUser, history]);
 
 
 
@@ -73,7 +73,7 @@ export const ProfilePage = () => {
       
 
       <Route path="/profile/orders" exact>
-        <span className="text text_type_main-default">Скоро здесь будет «История заказов»...</span>
+        <OrdersHistory />
       </Route>
     </main>
   )

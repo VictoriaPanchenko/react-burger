@@ -1,16 +1,18 @@
 import { sendEmailToRestorePassword, updatePassword, registerNewUser, getUserInfo, updateUserInfo, login, logout, refreshToken as refreshTokenServer } from '../../api/api-requests';
-import { setCookie, deleteCookie } from '../cookie-setting';
+import { setCookie, deleteCookie, getCookie } from '../cookie-setting';
 
 export const REGISTR_USER_REQUEST = 'REGISTR_USER_REQUEST';
 export const REGISTR_USER_SUCCESS = 'REGISTR_USER_SUCCESS';
 export const REGISTR_USER_FAILED = 'REGISTR_USER_FAILED';
 export const CLEAR_REGISTER_ERR = 'CLEAR_REGISTER_ERR';
 
+export const PWD_RECOVER_INITIAL = 'PWD_RECOVER_INITIAL';
 export const PWD_RECOVER_REQUEST = 'PWD_RECOVER_REQUEST';
 export const PWD_RECOVER_FAILED = 'PWD_RECOVER_FAILED';
 export const PWD_RECOVER_SUCCESS = 'PWD_RECOVER_SUCCESS';
 export const CLEAR_PWD_RECOVER_ERR = 'CLEAR_PWD_RECOVER_ERR';
 
+export const PWD_RESET_INITIAL = 'PWD_RESET_INITIAL';
 export const PWD_RESET_REQUEST = 'PWD_RESET_REQUEST';
 export const PWD_RESET_SUCCESS = 'PWD_RESET_SUCCESS';
 export const PWD_RESET_FAILED = 'PWD_RESET_FAILED';
@@ -44,140 +46,118 @@ export const CLEAR_REFRESH_TOKEN_ERR = 'CLEAR_REFRESH_TOKEN_ERR';
 export const CHECK_AUTH = 'CHECK_AUTH';
 export const CHECK_AUTH_CHECKED = 'CHECK_AUTH_CHECKED';
 
-
-export const loginUser = (email, password) => {
-    return function (dispatch) {
-        dispatch({ type: LOG_IN_REQUEST });
-        login(email, password)
-            .then((res) => {
-                setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
-                localStorage.setItem('refreshToken', res.refreshToken);
-                dispatch({ type: LOG_IN_SUCCESS, user: res.user });
-            })
-            .catch((err) => {
-                dispatch({ type: LOG_IN_FAILED, err: err.message });
-            });
-    };
+export const resetPasswordRecoverPageToInitial = () => {
+  return function (dispatch) {
+    dispatch({ type: PWD_RECOVER_INITIAL });
+  };
 };
 
-export const logoutUser = (refreshToken) => {
-    return function (dispatch) {
+export const resetPasswordResetPageToInitial = () => {
+  return function (dispatch) {
+    dispatch({ type: PWD_RESET_INITIAL });
+  };
+};
 
-        dispatch({ type: LOG_OUT_REQUEST });
-        logout(refreshToken)
-            .then((res) => {
-                deleteCookie('accessToken');
-                localStorage.removeItem('refreshToken');
-                dispatch({ type: LOG_OUT_SUCCESS });
-            })
-            .catch((err) => dispatch({ type: LOG_OUT_FAILED, err: err.message }));
-    };
+export const loginUser = (email, password) => {
+  return function (dispatch) {
+    dispatch({ type: LOG_IN_REQUEST });
+    login(email, password)
+      .then((res) => {
+        setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
+        localStorage.setItem('refreshToken', res.refreshToken);
+        dispatch({ type: LOG_IN_SUCCESS, user: res.user });
+      })
+      .catch((err) => {
+        dispatch({ type: LOG_IN_FAILED, err: err.message });
+      });
+  };
+};
+
+export const logoutUser = () => {
+  return function (dispatch) {
+
+    dispatch({ type: LOG_OUT_REQUEST });
+    logout()
+      .then((res) => {
+        deleteCookie('accessToken');
+        localStorage.removeItem('refreshToken');
+        dispatch({ type: LOG_OUT_SUCCESS });
+      })
+      .catch((err) => dispatch({ type: LOG_OUT_FAILED, err: err.message }));
+  };
 };
 
 export const createNewUser = (email, password, name) => {
-    return function (dispatch) {
-        dispatch({ type: REGISTR_USER_REQUEST });
+  return function (dispatch) {
+    dispatch({ type: REGISTR_USER_REQUEST });
 
-        registerNewUser(email, password, name)
-            .then((res) => {
-                setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
-                localStorage.setItem('refreshToken', res.refreshToken);
-                dispatch({ type: REGISTR_USER_SUCCESS, user: res.user });
-            })
-            .catch((err) => {
-                dispatch({ type: REGISTR_USER_FAILED, err: err.message });
-            });
-    };
+    registerNewUser(email, password, name)
+      .then((res) => {
+        setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
+        localStorage.setItem('refreshToken', res.refreshToken);
+        dispatch({ type: REGISTR_USER_SUCCESS, user: res.user });
+      })
+      .catch((err) => {
+        dispatch({ type: REGISTR_USER_FAILED, err: err.message });
+      });
+  };
 };
 
-export const getUser = (accessToken, refreshToken) => {
-    return function (dispatch) {
-      dispatch({ type: GET_USER_REQUEST });
-      getUserInfo(accessToken)
-        .then((res) => dispatch({ type: GET_USER_SUCCESS, user: res.user }))
-        .catch((err) => {
-          if (err.message === 'jwt expired') {
-            dispatch(fetchWithRefresh(refreshToken, getUser, accessToken));
-          } else {
-            dispatch({ type: GET_USER_FAILED, err: err.message });
-            return Promise.reject(err);
-          }
-        });
-    };
+export const getUser = () => {
+  return function (dispatch) {
+    dispatch({ type: GET_USER_REQUEST });
+    getUserInfo()
+      .then((res) => dispatch({ type: GET_USER_SUCCESS, user: res.user }))
+      .catch((err) => {
+        dispatch({ type: GET_USER_FAILED, err: err.message });
+      });
   };
+};
 
 
-export const patchUser = (accessToken, name, email, password, refreshToken) => {
-    return function (dispatch) {
-      dispatch({ type: PATCH_USER_REQUEST });
-      updateUserInfo(accessToken, name, email, password)
-        .then((res) => dispatch({ type: PATCH_USER_SUCCESS, user: res.user }))
-        .catch((err) => {
-          if (err.message === 'jwt expired' || err.message === 'You should be authorised') {
-            dispatch(fetchWithRefresh(refreshToken, patchUser, accessToken, name, email, password));
-          } else {
-            dispatch({ type: PATCH_USER_FAILED, err: err.message });
-            return Promise.reject(err);
-          }
-        });
-    };
+export const patchUser = ({ name, email, password }) => {
+  return function (dispatch) {
+    dispatch({ type: PATCH_USER_REQUEST });
+    updateUserInfo(name, email, password)
+      .then((res) => dispatch({ type: PATCH_USER_SUCCESS, user: res.user }))
+      .catch((err) => {
+        dispatch({ type: PATCH_USER_FAILED, err: err.message });
+      });
   };
+};
 
-  export const fetchWithRefresh = (refreshToken, request, ...requestParams) => {
-    return function (dispatch) {
-      if (!refreshToken) {
-        throw new Error('Token does not exist in storage');
-      } else {
-        dispatch({ type: REFRESH_TOKEN_REQUEST });
-        refreshTokenServer(refreshToken)
-          .then((res) => {
-            setCookie('accessToken', res.accessToken.split('Bearer ')[1]);
-            localStorage.setItem('refreshToken', res.refreshToken);
-            dispatch({ type: REFRESH_TOKEN_SUCCESS });
-            return res;
-          })
-          .then((res) => {
-            dispatch(request(...requestParams));
-          })
-          .catch((err) => {
-  
-            dispatch(logoutUser());
-            dispatch({ type: REFRESH_TOKEN_FAILED, err: err.message });
-            return Promise.reject(err);
-          });
-      }
-    };
-  };
 
 
 export const resetPassword = (password, token) => {
-    return function (dispatch) {
-        dispatch({ type: PWD_RESET_REQUEST });
-        updatePassword(password, token)
-            .then((res) => dispatch({ type: PWD_RESET_SUCCESS, success: res.success }))
-            .catch((err) => dispatch({ type: PWD_RESET_FAILED, err: err.message }));
-    };
+  return function (dispatch) {
+    dispatch({ type: PWD_RESET_REQUEST });
+    updatePassword(password, token)
+      .then((res) => dispatch({ type: PWD_RESET_SUCCESS, success: res.success }))
+      .catch((err) => dispatch({ type: PWD_RESET_FAILED, err: err.message }));
+  };
 };
 
 export const sendRecoverPasswordEmail = (email) => {
-    return function (dispatch) {
-        dispatch({ type: PWD_RECOVER_REQUEST });
-        sendEmailToRestorePassword(email)
-            .then((res) => dispatch({ type: PWD_RECOVER_SUCCESS, success: res.success }))
-            .catch((err) => dispatch({ type: PWD_RECOVER_FAILED, err: err.message }));
-    };
+  return function (dispatch) {
+    dispatch({ type: PWD_RECOVER_REQUEST });
+    sendEmailToRestorePassword(email)
+      .then((res) => dispatch({ type: PWD_RECOVER_SUCCESS, success: res.success }))
+      .catch((err) => dispatch({ type: PWD_RECOVER_FAILED, err: err.message }));
+  };
 };
 
-export const checkAuth = (accessToken, refreshToken) => {
-    return function (dispatch) {
-      dispatch({ type: CHECK_AUTH });
-      if (!!accessToken) {
-        dispatch(getUser(accessToken, refreshToken));
-      }
-  
-      dispatch({ type: CHECK_AUTH_CHECKED });
-    };
+export const checkAuth = () => {
+  return function (dispatch) {
+
+    const accessToken = getCookie('accessToken');
+    dispatch({ type: CHECK_AUTH });
+    if (!!accessToken) {
+      dispatch(getUser());
+    }
+
+    dispatch({ type: CHECK_AUTH_CHECKED });
   };
+};
 
 
 

@@ -17,8 +17,6 @@ export const ProfileForm = () => {
   const { user, patchUserRequest, patchUserFailed, isUserChanged, errMessage } = useSelector(
     (store) => store.user
   );
-  const accessToken = getCookie('accessToken');
-  const refreshToken = localStorage.getItem('refreshToken');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,9 +30,9 @@ export const ProfileForm = () => {
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      dispatch(patchUser(`Bearer ${accessToken}`, name, email, password, refreshToken));
+      dispatch(patchUser({ name, email, password}));
     },
-    [dispatch, name, email, password, accessToken, refreshToken]
+    [dispatch, name, email, password]
   );
 
   const handleCancel = useCallback(

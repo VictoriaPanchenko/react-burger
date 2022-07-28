@@ -7,6 +7,7 @@ import { sendOrder } from "../../services/actions/order";
 import { addItem, removeItem } from "../../services/actions/constructor";
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from "react-dnd";
+import { getCookie } from "../../services/cookie-setting";
 import FixingsContainer from '../fixings-containter/fixings-container';
 
 const BurgerConstructor = () => {
