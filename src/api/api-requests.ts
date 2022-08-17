@@ -1,7 +1,7 @@
 import { baseUrl } from "../utils/constants";
 import { setCookie,getCookie } from "../services/cookie-setting";
 
-const checkResponse = (res) => {
+const checkResponse = (res : Response) => {
   return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
 };
 
@@ -14,7 +14,7 @@ export const getUserInfo = () => {
     })
   }
 
-  export const updateUserInfo = (name, email, password) => {
+  export const updateUserInfo = (name: string, email: string, password: string) => {
     return  fetchWithRefresh(`${baseUrl}/auth/user`, {
       method: 'PATCH',
       headers: {
@@ -30,7 +30,7 @@ export const getUserInfo = () => {
   }
 
 
-export const registerNewUser = (name, email, password) => {
+export const registerNewUser = (name: string, email: string, password: string) => {
     return fetch(`${baseUrl}/auth/register`, {
       method: 'POST',
       headers: {
@@ -45,7 +45,7 @@ export const registerNewUser = (name, email, password) => {
   }
 
 
-  export const login = (email, password) => {
+  export const login = (email: string, password: string) => {
     return fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
       headers: {
@@ -87,7 +87,7 @@ export const getInitialIngredients = () => {
         .then(res => checkResponse(res))
 }
 
-export const postOrder = (productIds) => {
+export const postOrder = (productIds: string[]) => {
     return fetchWithRefresh(`${baseUrl}/orders`, {
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -98,11 +98,11 @@ export const postOrder = (productIds) => {
     })
 }
 
-export const getOrderInfo = (orderNumber) => {
+export const getOrderInfo = (orderNumber: number) => {
   return fetch(`${baseUrl}/orders/${orderNumber}`).then(checkResponse);
 }
 
-export const sendEmailToRestorePassword = (email) => {
+export const sendEmailToRestorePassword = (email: string) => {
     return fetch(`${baseUrl}/password-reset`, {
         method: 'POST',
         headers: {
@@ -114,7 +114,7 @@ export const sendEmailToRestorePassword = (email) => {
     }).then(res => checkResponse(res))
 }
 
-export const updatePassword = (password, token) => {
+export const updatePassword = (password: string, token: string) => {
     return fetch(`${baseUrl}/password-reset/reset`, {
         method: 'POST',
         headers: {
@@ -127,12 +127,12 @@ export const updatePassword = (password, token) => {
     }).then(checkResponse);
 }
 
-async function fetchWithRefresh(url, options) {
+async function fetchWithRefresh(url: string, options: any) {
   try {
     const res = await fetch (url, options);
     const data = await checkResponse(res);
     return data;
-  } catch (err) {
+  } catch (err : any) {
 
     if (!err.success) {
         const refreshData = await refreshToken();
