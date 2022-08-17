@@ -8,6 +8,10 @@
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.13.1",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^16.11.29",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
     "immutability-helper": "^3.1.1",
     "react": "^18.0.0",
     "react-dnd": "^16.0.1",
@@ -26,8 +30,11 @@
   "devDependencies": {
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.27",
-    "@types/react": "^18.0.5",
-    "@types/react-dom": "^18.0.1",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-redux": "^7.1.24",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/uuid": "^8.3.4",
     "gh-pages": "^4.0.0"
   },
   "scripts": {

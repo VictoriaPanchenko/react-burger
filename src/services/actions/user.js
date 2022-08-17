@@ -1,4 +1,4 @@
-import { sendEmailToRestorePassword, updatePassword, registerNewUser, getUserInfo, updateUserInfo, login, logout, refreshToken as refreshTokenServer } from '../../api/api-requests';
+import { sendEmailToRestorePassword, updatePassword, registerNewUser, getUserInfo, updateUserInfo, login, logout } from '../../api/api-requests';
 import { setCookie, deleteCookie, getCookie } from '../cookie-setting';
 
 export const REGISTR_USER_REQUEST = 'REGISTR_USER_REQUEST';
@@ -165,8 +165,8 @@ export const checkAuth = () => {
 
 export const clearPwdRecoverErr = () => ({ type: CLEAR_PWD_RECOVER_ERR });
 export const clearPwdResetErr = () => ({ type: CLEAR_PWD_RESET_ERR });
-export const clearRegisterError = () => ({ type: CLEAR_REGISTER_ERR });
-export const clearLogInErr = () => ({ type: CLEAR_LOG_IN_ERR });
+//export const clearRegisterError = () => ({ type: CLEAR_REGISTER_ERR });
+//export const clearLogInErr = () => ({ type: CLEAR_LOG_IN_ERR });
 export const clearLogOutErr = () => ({ type: CLEAR_LOG_OUT_ERR });
 export const clearGetUserErr = () => ({ type: CLEAR_GET_USER_ERR });
 export const clearPatchUserErr = () => ({ type: CLEAR_PATCH_USER_ERR });

@@ -3,7 +3,7 @@ import { NavLink, useHistory, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styles from './profile.module.css';
 import { ProfileForm } from "../../components/profile-form/profile-form";
-import { logoutUser, clearPatchUserErr } from "../../services/actions/user";
+import { logoutUser } from "../../services/actions/user";
 import { useSelector } from "react-redux";
 import { OrdersHistory } from "../orders-history/orders-history";
 
