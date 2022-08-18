@@ -13,7 +13,6 @@ interface INotification extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>
   message?: string;
   backHome?: boolean;
   onClose?: () => void;
-  onRepeatRequest?: () => void;
 }
 
 const Notification:FC<INotification> = ({ heading, message, backHome, onClose }) => {
@@ -50,14 +49,6 @@ const Notification:FC<INotification> = ({ heading, message, backHome, onClose })
     </div>,
     rootNotifications!
   );
-};
-
-Notification.propTypes = {
-  heading: PropTypes.string.isRequired,
-  message: PropTypes.string,
-  onRepeatRequest: PropTypes.func,
-  onClose: PropTypes.func,
-  backHome: PropTypes.bool,
 };
 
 export default Notification;
