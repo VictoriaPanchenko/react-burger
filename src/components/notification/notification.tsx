@@ -1,29 +1,31 @@
-import React, { useRef } from 'react';
+import React, { useRef, FC, DetailedHTMLProps, HTMLAttributes } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './notification.module.css';
-import { CloseIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch } from '../../services/store';
 import { clearPwdRecoverErr, clearPwdResetErr } from '../../services/actions/user';
 
 const rootNotifications = document.getElementById('notifications');
 
-const Notification = ({ heading, message, onRepeatRequest, onClose, backHome }) => {
-  const containerRef = useRef(null);
+interface INotification extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  heading?: string;
+  message?: string;
+  backHome?: boolean;
+  onClose?: () => void;
+  onRepeatRequest?: () => void;
+}
+
+const Notification:FC<INotification> = ({ heading, message, backHome, onClose }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const cleanError = () => {
     dispatch(clearPwdRecoverErr());
     dispatch(clearPwdResetErr());
     onClose && onClose();
-    containerRef.current.classList.add(styles.notification_closed);
-  };
-
-  const closeNotification = () => {
-    onClose && onClose();
-    containerRef.current.classList.add(styles.notification_closed);
+    containerRef?.current != null && containerRef.current.classList.add(styles.notification_closed);
   };
 
   return ReactDOM.createPortal(
@@ -36,12 +38,8 @@ const Notification = ({ heading, message, onRepeatRequest, onClose, backHome }) 
           {message}
         </p>
       )}
-      <div className={styles.notification__controls}>
-        {onRepeatRequest && (
-          <Button type='primary' size='small' onClick={() => onRepeatRequest()}>
-            Повторить запрос
-          </Button>
-        )}
+      <div className={styles.notification__controls}>     
+        
         {backHome && (
           <Link onClick={() => cleanError()} className={`${styles.notification__homeLink} text text_type_main-default`} to={'/'}>
             Вернуться на главную
@@ -50,7 +48,7 @@ const Notification = ({ heading, message, onRepeatRequest, onClose, backHome }) 
       </div>
       
     </div>,
-    rootNotifications
+    rootNotifications!
   );
 };
 
