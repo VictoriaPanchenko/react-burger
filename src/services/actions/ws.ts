@@ -80,7 +80,9 @@ export const wsInitWithToken = (url: string): IWsInitWithTokenAction => {
     payload: url,
   };
 };
+
 export const wsInit = (): IWsInitAction => ({ type: WS_CONNECTION_START });
+
 export const wsConnectionSuccess = (): IWsConnectionSuccessAction => ({
   type: WS_CONNECTION_SUCCESS,
 });
@@ -98,3 +100,5 @@ export const wsGetMessage = (res: IWsResponse): IWsGetMessageAction => ({
   type: WS_GET_MESSAGE,
   payload: res,
 });
+
+

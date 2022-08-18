@@ -19,9 +19,10 @@ import { checkAuth } from '../../services/actions/user';
 import { clearConstructor } from '../../services/actions/constructor';
 import { OrdersInfoDetails } from '../order-info-details/order-info-details';
 import Preloader from '../preloader/preloader';
+import { useAppSelector } from '../../services/store';
 
 export const Constructor = () => {
-
+    const { wsOpen, orders, wsRequest } = useAppSelector((store) => store.ws);
     const location = useLocation();
     const background = location.state && location.state.background;
 
@@ -46,7 +47,7 @@ export const Constructor = () => {
 
     const closeOrdersModal = useCallback(() => {
         history.goBack();
-        dispatch(cleanOrderInfo());
+       // dispatch(cleanOrderInfo());
     }, [dispatch, history]);
 
 
@@ -75,7 +76,7 @@ export const Constructor = () => {
     );
 
     const modalOrderDetailFromFeed = (
-        <Route exact path="/feed/:orderNumber">
+        <Route exact path="/feed/:id">
             <Modal onClose={() => closeOrdersModal()}>
                 <OrdersInfoDetails isPopup />
             </Modal>
@@ -83,9 +84,9 @@ export const Constructor = () => {
     );
 
     const modalOrderDetailFromProfile = (
-        <Route exact path="/profile/orders/:orderNumber">
+        <Route exact path="/profile/orders/:id">
             <Modal onClose={() => closeOrdersModal()}>
-                <OrdersInfoDetails isPopup />
+                <OrdersInfoDetails isPopup personal />
             </Modal>
         </Route>
     );
@@ -99,11 +100,11 @@ export const Constructor = () => {
                 <Route exact path="/feed">
                     <FeedPage />
                 </Route>
-                <Route exact path="/feed/:orderNumber">
+                <Route exact path="/feed/:id">
                     {!isOrderDetailModalOpened && <OrderInfoPage />}
                 </Route>
-                <Route exact path="/profile/orders/:orderNumber">
-                    {!isOrderDetailModalOpened && <OrderInfoPage />}
+                <Route exact path="/profile/orders/:id">
+                    {!isOrderDetailModalOpened && <OrderInfoPage personal/>}
                 </Route>
                 <Route exact path="/login">
                     <LoginPage />
@@ -147,10 +148,6 @@ export const Constructor = () => {
             {
                 (!orderRequest && !orderFailed) ? modalOrder : <Preloader />
             }
-
-
-
-
 
 
         </div>

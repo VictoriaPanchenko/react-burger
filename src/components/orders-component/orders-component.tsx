@@ -1,31 +1,36 @@
-import React, { useCallback } from "react";
-import { useSelector } from "react-redux";
+import React, { useCallback, FC, DetailedHTMLProps, LiHTMLAttributes } from "react";
+import { IIngredient, IWsOrder } from "../../services/types";
 import { Link, useLocation } from 'react-router-dom';
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./orders-component.module.css";
 import { formatDate } from "../../utils/helpers";
-import { useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from "../../services/store";
 import { openOrderDetailModal } from "../../services/actions/order";
 
-export const OrdersComponent = ({ order, isHistory = false }) => {
 
-  const dispatch = useDispatch();
+interface IOrdersComponent extends DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement> {
+  order: IWsOrder;
+  isHistory: boolean
+}
+
+export const OrdersComponent: FC<IOrdersComponent> = ({ order, isHistory = false }) => {
+
+  const dispatch = useAppDispatch();
 
   const openModal = useCallback(() => {
     dispatch(openOrderDetailModal());
   }, [dispatch, openOrderDetailModal]);
 
-
-
   const location = useLocation();
+
   const {
-    status, number, createdAt, name, ingredients,
+    status, number, createdAt, name, ingredients, _id
   } = order;
-  const { ingredientsArray } = useSelector((store) => store.ingredients);
+  const { ingredientsArray } = useAppSelector((store) => store.ingredients);
 
-  const findIngredient = (product, products) => products.find((foundIngredient) => foundIngredient._id === product);
+  const findIngredient = (product: string, products:IIngredient[]) => products.find((foundIngredient) => foundIngredient._id === product);
 
-  const checkStatus = (condition) => {
+  const checkStatus = (condition:string) => {
     if (condition === 'done') {
       return 'Выполнен';
     }
@@ -48,7 +53,7 @@ export const OrdersComponent = ({ order, isHistory = false }) => {
       <Link
         className={styles.link}
         to={{
-          pathname: `${location.pathname}/${number}`,
+          pathname: `${location.pathname}/${_id}`,
           state: { background: location },
         }}
         onClick={openModal}

@@ -9,13 +9,13 @@ import {
 } from "../../api/api-requests";
 import { setCookie, deleteCookie, getCookie } from "../cookie-setting";
 import { IUser } from "../types/api";
-
 import {
   PWD_RECOVER_INITIAL,
   PWD_RECOVER_FAILED,
   PWD_RECOVER_REQUEST,
   PWD_RECOVER_SUCCESS,
   CLEAR_PWD_RECOVER_ERR,
+  PWD_RESET_INITIAL,
   PWD_RESET_REQUEST,
   PWD_RESET_SUCCESS,
   PWD_RESET_FAILED,
@@ -50,6 +50,10 @@ export interface IClearPwdResetErrorAction {
 
 export interface IPwdRecoverInitAction {
   readonly type: typeof PWD_RECOVER_INITIAL;
+}
+
+export interface IPwdResetInitAction {
+  readonly type: typeof PWD_RESET_INITIAL;
 }
 
 export interface ILoginRequestAction {
@@ -153,6 +157,7 @@ export type TUserActions =
   | IClearPwdRecoveryErrorAction
   | IClearPwdResetErrorAction
   | IPwdRecoverInitAction
+  | IPwdResetInitAction
   | ILoginRequestAction
   | ILoginSuccessAction
   | ILoginFailedAction
@@ -180,12 +185,19 @@ export type TUserActions =
 export const clearPwdRecoverErr = (): IClearPwdRecoveryErrorAction => ({
   type: CLEAR_PWD_RECOVER_ERR,
 });
+
 export const clearPwdResetErr = (): IClearPwdResetErrorAction => ({
   type: CLEAR_PWD_RESET_ERR,
 });
+
 export const pwdRecoveryInit = (): IPwdRecoverInitAction => ({
   type: PWD_RECOVER_INITIAL,
 });
+
+export const pwdResetInit = (): IPwdResetInitAction => ({
+  type: PWD_RESET_INITIAL,
+});
+
 export const loginRequest = (): ILoginRequestAction => ({
   type: LOG_IN_REQUEST,
 });
@@ -276,9 +288,15 @@ export const authChecked = (): IAuthCheckedAction => ({
   type: CHECK_AUTH_CHECKED,
 });
 
-export const resetPasswordResetPageToInitial = (): AppThunk => {
+export const resetPasswordRecoverPageToInitial = (): AppThunk => {
   return function (dispatch) {
     dispatch(pwdRecoveryInit());
+  };
+};
+
+export const resetPasswordResetPageToInitial = (): AppThunk => {
+  return function (dispatch) {
+    dispatch(pwdResetInit());
   };
 };
 

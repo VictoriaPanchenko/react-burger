@@ -13,5 +13,5 @@ export const rootReducer = combineReducers({
     order: orderReducer,
     ingredients: ingredientsReducer,
     user: userReducer,
-    ordersInfoFeed: ordersInfoReducer
+    ws: ordersInfoReducer //ws
 });

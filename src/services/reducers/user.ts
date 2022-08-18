@@ -6,6 +6,7 @@ import {
   PWD_RECOVER_REQUEST,
   PWD_RECOVER_SUCCESS,
   CLEAR_PWD_RECOVER_ERR,
+  PWD_RESET_INITIAL,
   PWD_RESET_REQUEST,
   PWD_RESET_SUCCESS,
   PWD_RESET_FAILED,
@@ -221,6 +222,15 @@ export const userReducer = (
         errMessage: "",
       };
     }
+    case PWD_RESET_INITIAL: {
+      return {
+          ...state,
+          passwordResetRequest: false,
+          passwordResetErr: false,
+          isPasswordReset: false,
+          errMessage: '',
+      };
+  }
     case PWD_RESET_REQUEST: {
       return {
         ...state,
