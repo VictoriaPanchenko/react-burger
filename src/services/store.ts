@@ -11,8 +11,8 @@ export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppThunk<TReturn = void> = ThunkAction<TReturn, RootState, unknown, TApplicationActions>;
 
-//export type AppDispatch = ThunkDispatch<RootState, never, TApplicationActions>;
-export type AppDispatch = Dispatch<TApplicationActions>; 
+export type AppDispatch = ThunkDispatch<RootState, never, TApplicationActions>;
+//export type AppDispatch = Dispatch<TApplicationActions>; 
 
 export const useAppDispatch = () => useDispatch<AppDispatch & AppThunk>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

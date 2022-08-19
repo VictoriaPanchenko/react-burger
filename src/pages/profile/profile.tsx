@@ -1,25 +1,23 @@
-import React, { useCallback } from "react";
+import React, { useCallback,FC,DetailedHTMLProps, HTMLAttributes } from "react";
 import { NavLink, useHistory, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import styles from './profile.module.css';
 import { ProfileForm } from "../../components/profile-form/profile-form";
 import { logoutUser } from "../../services/actions/user";
-import { useSelector } from "react-redux";
 import { OrdersHistory } from "../orders-history/orders-history";
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
-export const ProfilePage = () => {
+interface IProfile extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
 
-  const { user, patchUserRequest, patchUserFailed, isUserChanged, errMessage } = useSelector(
-    (store) => store.user
-  );
+export const ProfilePage:FC<IProfile> = () => {
 
-  const dispatch = useDispatch();
+
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   const handleLogout = useCallback(() => {
     dispatch(logoutUser());
 
-    history.replace({ path: '/login' });
+    history.replace({ pathname: '/login' });
   }, [dispatch, logoutUser, history]);
 
 
@@ -51,7 +49,6 @@ export const ProfilePage = () => {
           </li>
           <li>
             <button
-              activeClassName={styles.link_active}
               className={`${styles.link} text text_type_main-medium`}
               onClick={handleLogout}
             >

@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useCallback, FC, useRef, useEffect, ChangeEvent, DetailedHTMLProps, HTMLAttributes, FormEvent } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
 import {
   Input,
   Button,
@@ -8,11 +7,15 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './register.module.css';
 import { createNewUser } from "../../services/actions/user";
+import { useAppSelector, useAppDispatch } from "../../services/store";
 
-export const RegisterPage = () => {
 
-  const { user } = useSelector((store) => store.user);
-  const dispatch = useDispatch();
+interface IRegisterPage extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
+
+export const RegisterPage:FC<IRegisterPage> = () => {
+
+  const { user } = useAppSelector((store) => store.user);
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   const [userName, setUserName] = useState("");
@@ -20,19 +23,19 @@ export const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const inputRef = useRef(null);
 
-  const onNameChange = (e) => {
+  const onNameChange = (e:ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
   };
 
-  const onEmailChange = (e) => {
+  const onEmailChange = (e:ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const onPasswordChange = (e) => {
+  const onPasswordChange = (e:ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
     if (!userName || !email || !password) {
       return;

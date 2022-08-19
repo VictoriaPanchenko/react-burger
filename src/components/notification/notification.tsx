@@ -2,7 +2,6 @@ import React, { useRef, FC, DetailedHTMLProps, HTMLAttributes } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './notification.module.css';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useAppDispatch } from '../../services/store';
 import { clearPwdRecoverErr, clearPwdResetErr } from '../../services/actions/user';
 

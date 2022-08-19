@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, ChangeEvent, FormEvent, FC,  DetailedHTMLProps, HTMLAttributes  } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Input,
   Button,
@@ -8,18 +7,21 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
 import { loginUser } from "../../services/actions/user";
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
-export const LoginPage = () => {
+interface ILoginPage extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
 
-  const {user} = useSelector((store) => store.user);
+export const LoginPage:FC<ILoginPage> = () => {
+
+  const {user} = useAppSelector((store) => store.user);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const inputRef = useRef(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<any>();
 
   useEffect(() => {
     if (user) {
@@ -27,15 +29,15 @@ export const LoginPage = () => {
     }
   }, [user, history, location]);
 
-  const onEmailChange = (e) => {
+  const onEmailChange = (e:ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const onPasswordChange = (e) => {
+  const onPasswordChange = (e:ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       return;
@@ -68,6 +70,7 @@ export const LoginPage = () => {
             onChange={onPasswordChange}
             value={password}
             name="password"
+            // @ts-ignore
             placeholder="Пароль"
           />
         </div>

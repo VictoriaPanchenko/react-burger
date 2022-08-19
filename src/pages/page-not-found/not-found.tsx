@@ -1,11 +1,14 @@
-import React from "react";
+import React , { FC,DetailedHTMLProps, HTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './not-found.module.css';
 
-export const NotFoundPage = () => (
+
+interface INotFoundPage extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
+
+export const NotFoundPage:FC<INotFoundPage> = () => (
   <main className={styles.wrapper}>
     <p className="text text_type_digits-large text_color_inactive">404</p>
     <h2 className="text text_type_main-large">

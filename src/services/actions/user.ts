@@ -301,7 +301,7 @@ export const resetPasswordResetPageToInitial = (): AppThunk => {
 };
 
 export const loginUser = (email: string, password: string): AppThunk => {
-  return function (dispatch: AppDispatch) {
+  return function (dispatch) {
     dispatch(loginRequest());
     login(email, password)
       .then((res) => {

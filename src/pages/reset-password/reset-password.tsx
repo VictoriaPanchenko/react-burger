@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useCallback, FC, useRef, useEffect, ChangeEvent, DetailedHTMLProps, HTMLAttributes, FormEvent } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
   Input,
@@ -10,31 +9,34 @@ import styles from './reset-password.module.css';
 import { resetPassword, clearPwdResetErr, resetPasswordResetPageToInitial  } from '../../services/actions/user';
 import Notification from "../../components/notification/notification";
 import { Redirect, useLocation } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from "../../services/store";
 
-export const ResetPasswordPage = () => {
+interface IResetPasswordPage extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
 
-  const { user, errMessage, passwordResetRequest, passwordResetErr, isPasswordReset } = useSelector(
+export const ResetPasswordPage:FC<IResetPasswordPage> = () => {
+
+  const { user, errMessage, passwordResetRequest, passwordResetErr, isPasswordReset } = useAppSelector(
     (store) => store.user
   );
 
   const [token, setToken] = useState('');
   const [password, setPassword] = useState("");
   
-  const inputRef = useRef(null);
-  const dispatch = useDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<{ from: string }>();
 
-  const onPasswordChange = (e) => {
+  const onPasswordChange = (e:ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const onCodeChange = (e) => {
+  const onCodeChange = (e:ChangeEvent<HTMLInputElement>) => {
     setToken(e.target.value);
   };
 
   const handleSubmit = useCallback(
-    (e) => {
+    (e : FormEvent) => {
       e.preventDefault();
       dispatch(resetPassword(password, token));
     },
@@ -71,6 +73,7 @@ export const ResetPasswordPage = () => {
           onChange={onPasswordChange}
           value={password}
           name="password"
+          // @ts-ignore
           placeholder="Введите новый пароль"
         />
         <div className="mb-6 mt-6">
@@ -86,7 +89,7 @@ export const ResetPasswordPage = () => {
             ref={inputRef}
           />
         </div>
-        <Button type="primary" size="medium">
+        <Button disabled={!(password && token)} type="primary" size="medium">
           Сохранить
         </Button>
       </form>
