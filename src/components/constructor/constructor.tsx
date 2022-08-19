@@ -6,7 +6,6 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import MainContent from "../main-content/main-content";
-import { getIngredients } from "../../services/actions/ingredients";
 import { closeOrderModal } from "../../services/actions/order";
 import { closeDetailModal } from "../../services/actions/ingredient-detail";
 import {
@@ -64,7 +63,6 @@ export const Constructor: FC<IConstructor> = () => {
 
   useEffect(() => {
     dispatch(checkAuth());
-    dispatch(getIngredients());
   }, [dispatch]);
 
   const modalOrder = orderNumber && (

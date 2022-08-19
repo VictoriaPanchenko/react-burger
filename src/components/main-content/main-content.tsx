@@ -6,7 +6,6 @@ import styles from "./main-content.module.css";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import { clearOrderError } from "../../services/actions/order";
-import { getIngredients } from "../../services/actions/ingredients";
 import { clearIngredientsError } from "../../services/actions/ingredients";
 import Notification from "../notification/notification";
 import { FC, DetailedHTMLProps, HTMLAttributes } from "react";
@@ -27,10 +26,6 @@ const MainContent: FC<IMainContent> = () => {
     dispatch(clearOrderError());
     dispatch(clearIngredientsError());
   };
-
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
 
   return (
     <div className={styles.wrapper}>

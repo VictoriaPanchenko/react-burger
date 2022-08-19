@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import detailStyles from './ingredient-details.module.css';
 import { useParams } from "react-router-dom";
-import { getIngredients } from '../../services/actions/ingredients';
 import { FC, DetailedHTMLProps, HTMLAttributes } from "react";
 import { useAppDispatch, useAppSelector } from "../../services/store";
 
@@ -9,11 +8,6 @@ interface IIngredientDetails
   extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
 
 const IngredientDetails:FC<IIngredientDetails> = () => {
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(getIngredients());
-    }, [dispatch]);
 
     const { id } = useParams<{id:string}>();
     const { ingredientsArray, ingredientsRequest } = useAppSelector(store => store.ingredients);
