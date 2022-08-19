@@ -45,7 +45,10 @@ export const OrdersInfoDetails: FC<IOrdersInfoDetails> = ({
             `wss://norma.nomoreparties.space/orders?token=${accessToken}`
           )
         )
-      : dispatch(wsInit());    
+      : dispatch(wsInit());   
+      return () => {
+        dispatch(wsClose());
+      }; 
   }, [dispatch, accessToken]);
 
   const resetError = useCallback(() => {

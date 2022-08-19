@@ -23,7 +23,9 @@ export const FeedPage: FC<IFeedPage> = () => {
 
   useEffect(() => {
     dispatch(wsInit());
-  
+    return () => {
+      dispatch(wsClose());
+    };  
   }, [dispatch]);
 
   const resetError = useCallback(() => {

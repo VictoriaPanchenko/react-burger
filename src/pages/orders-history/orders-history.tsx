@@ -18,7 +18,9 @@ export const OrdersHistory: FC<IOrderHistory> = () => {
 
   useEffect(() => {
     dispatch(wsInitWithToken(`wss://norma.nomoreparties.space/orders?token=${accessToken}`));
-    
+    return () => {
+      dispatch(wsClose());
+    };
   }, [dispatch, accessToken]);
 
   const resetError = useCallback(() => {
