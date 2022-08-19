@@ -1,8 +1,18 @@
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import navigationStyles from './ingredients-navigation.module.css';
+import { FC, DetailedHTMLProps, HTMLAttributes } from "react";
+import { TIngredientsType } from '../../services/types';
 
-const IngredientsNavigation = ({ tabs, current, handleClick }) => {
+
+interface IIngredientsNavigation
+  extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
+    tabs: TIngredientsType[],
+    current: string,
+    handleClick: (type: string) => void
+  }
+
+const IngredientsNavigation:FC<IIngredientsNavigation> = ({ tabs, current, handleClick }) => {
 
     return (
         <nav className={navigationStyles.navigation}>
@@ -12,12 +22,6 @@ const IngredientsNavigation = ({ tabs, current, handleClick }) => {
             }
         </nav>
     )
-}
-
-IngredientsNavigation.propTypes = {
-    tabs: PropTypes.array.isRequired,
-    current: PropTypes.string.isRequired,
-    handleClick: PropTypes.func.isRequired
 }
 
 export default IngredientsNavigation

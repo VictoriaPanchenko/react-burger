@@ -22,6 +22,12 @@ export interface IIngredient {
     qty?: number;
   }
 
+  export type TIngredientsType = {
+    id: string;
+    type: string;
+    name: string;
+  };  
+  
   export interface IOwner {
     name: string;
     email: string;

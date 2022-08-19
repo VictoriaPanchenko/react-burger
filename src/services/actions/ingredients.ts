@@ -11,7 +11,7 @@ import { IIngredientResponse } from '../types/api';
 
 
 export function getIngredients(): AppThunk {
-    return function (dispatch: AppDispatch) {
+    return function (dispatch) {
       dispatch(getIngredientsRequest());
       getInitialIngredients()
         .then(res => dispatch({ type: GET_INGREDIENTS_SUCCESS, ingredients: res.data }))

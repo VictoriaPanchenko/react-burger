@@ -1,9 +1,13 @@
+import React, { FC, DetailedHTMLProps, HTMLAttributes } from "react";
 import orderDetailStyles from './order-details.module.css';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from "../../services/store";
 
-const OrderDetails = () => {
+interface IOrderDetails
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
 
-  const { orderFailed, orderNumber } = useSelector(store => store.order);
+const OrderDetails:FC<IOrderDetails> = () => {
+
+  const { orderFailed, orderNumber } = useAppSelector(store => store.order);
 
   return (
     <div className={orderDetailStyles.container}>

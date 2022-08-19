@@ -1,11 +1,14 @@
 import React, { forwardRef } from 'react';
-import PropTypes from 'prop-types';
 import IngredientsItem from '../ingredients-item/ingredients-item';
 import listStyles from './ingredients-list.module.css';
-import ingredientItemPropType from '../../utils/custom-prop-types';
-import { categoryPropType } from '../../utils/product-types';
+import { IIngredient, TIngredientsType } from '../../services/types';
 
-const IngredientsList = forwardRef(({ itemsArr, itemType }, ref) => {
+interface IIngredientList {
+    itemsArr: IIngredient[];
+    itemType: TIngredientsType;
+  }
+
+const IngredientsList = forwardRef<HTMLUListElement, IIngredientList>(({ itemsArr, itemType }, ref) => {
     return (
         <div className={`${listStyles.wrapper} mb-10`}>
             <h2 id={itemType.type} className='text text_type_main-medium mb-6'>{itemType.name}</h2>
@@ -21,10 +24,5 @@ const IngredientsList = forwardRef(({ itemsArr, itemType }, ref) => {
         </div>
     );
 });
-
-IngredientsList.propTypes = {
-    itemsArr: PropTypes.arrayOf(ingredientItemPropType.isRequired).isRequired,
-    itemType: categoryPropType.isRequired
-};
 
 export default IngredientsList;

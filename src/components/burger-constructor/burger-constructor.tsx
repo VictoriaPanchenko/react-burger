@@ -1,4 +1,3 @@
-import React from "react";
 import { ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-constructor.module.css';
 import { useHistory } from 'react-router-dom';
@@ -9,22 +8,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from "react-dnd";
 import { getCookie } from "../../services/cookie-setting";
 import FixingsContainer from '../fixings-containter/fixings-container';
+import React, { FC, DetailedHTMLProps, HTMLAttributes, } from 'react';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { IIngredient } from '../../services/types';
 
-const BurgerConstructor = () => {
+interface IBurgerConstructor extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
 
-    const { bun, fixings, totalPrice, productsIds } = useSelector(store => store.burgerConstructor);
-    const { user } = useSelector(store => store.user);
-    const dispatch = useDispatch();
+const BurgerConstructor:FC<IBurgerConstructor> = () => {
+
+    const { bun, fixings, totalPrice, productsIds } = useAppSelector(store => store.burgerConstructor);
+    const { user } = useAppSelector(store => store.user);
+    const dispatch = useAppDispatch();
     const history = useHistory();
 
-    const onOrderClick = (ids) => {
+    const onOrderClick = (ids:string[]) => {
         user && dispatch(sendOrder(ids));
         !user && history.push('/login');
     }
 
     const [{isHover}, drop] = useDrop({
         accept: "ingredient",
-        drop(item) {
+        drop(item:IIngredient) {
             dispatch(addItem(item));
         },
         collect: monitor => ({
@@ -32,7 +36,7 @@ const BurgerConstructor = () => {
         })
     });
 
-    const handleDelete = (item) => {
+    const handleDelete = (item:IIngredient) => {
         dispatch(removeItem(item));
     }  
 
@@ -49,7 +53,7 @@ const BurgerConstructor = () => {
                         thumbnail={bun.image_mobile}
                     />
                 </li> }
-                <div className={`${constructorStyles.fixings} pr-2`}>
+                <li className={`${constructorStyles.fixings} pr-2`}>
                 {   fixings && fixings.length > 0 && 
                         fixings.map((item, index) =>
                         <FixingsContainer
@@ -59,7 +63,7 @@ const BurgerConstructor = () => {
                         handleDelete={handleDelete} />
                         )
                     }               
-                </div>               
+                </li>               
                 { bun && <li key={`${bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
                     <ConstructorElement
                         type='bottom'

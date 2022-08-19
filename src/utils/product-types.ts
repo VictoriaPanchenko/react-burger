@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 export const categories = {
   Bun: {
     id: 'type1',
@@ -17,10 +15,4 @@ export const categories = {
     name: 'Начинки'
   }  
 };
-
-export const categoryPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['bun', 'main','sauce']).isRequired,
-});
 

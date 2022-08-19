@@ -1,12 +1,14 @@
-import React from "react";
+import React, { FC, DetailedHTMLProps, HTMLAttributes, } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import appHeaderStyles from './app-header.module.css';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
-const AppHeader = () => {
+interface IHeader extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
 
-    const { user } = useSelector(store => store.user);
+const AppHeader: FC<IHeader> = () => {
+
+    const { user } = useAppSelector(store => store.user);
 
 
     return (

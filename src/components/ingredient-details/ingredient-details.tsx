@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
 import detailStyles from './ingredient-details.module.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
 import { getIngredients } from '../../services/actions/ingredients';
+import { FC, DetailedHTMLProps, HTMLAttributes } from "react";
+import { useAppDispatch, useAppSelector } from "../../services/store";
 
-const IngredientDetails = () => {
-    const dispatch = useDispatch();
+interface IIngredientDetails
+  extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
+
+const IngredientDetails:FC<IIngredientDetails> = () => {
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(getIngredients());
     }, [dispatch]);
 
-    const { id } = useParams();
-    const { ingredientsArray, ingredientsRequest } = useSelector(store => store.ingredients);
+    const { id } = useParams<{id:string}>();
+    const { ingredientsArray, ingredientsRequest } = useAppSelector(store => store.ingredients);
     const selectedIngredient = ingredientsArray.find(item => item._id === id);
 
     if(ingredientsRequest || ingredientsArray.length === 0){
@@ -22,7 +26,7 @@ const IngredientDetails = () => {
     }
     return (
  
-        <div className={detailStyles.container}>
+        <div className={detailStyles.container}>{selectedIngredient && (<>
             <img src={selectedIngredient.image_large} alt={selectedIngredient.name} />
             <p className='text text_type_main-medium mb-8'>{selectedIngredient.name}</p>
             <ul className={`${detailStyles.list} text_color_inactive`}>
@@ -42,7 +46,7 @@ const IngredientDetails = () => {
                     <p className='text text_type_main-default mb-2'>Углеводы, г</p>
                     <p className='text text_type_digits-default'>{selectedIngredient.carbohydrates}</p>
                 </li>
-            </ul>
+            </ul></>)}
         </div>
 
     );

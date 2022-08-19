@@ -56,7 +56,7 @@ export type TOrderActions =
   | IPostOrderSuccessAction;
 
 export function sendOrder(order: string[]): AppThunk {
-  return function (dispatch: AppDispatch) {
+  return function (dispatch) {
     dispatch(orderRequest());
     postOrder(order)
       .then((res) => {
