@@ -53,7 +53,7 @@ const BurgerConstructor:FC<IBurgerConstructor> = () => {
                         thumbnail={bun.image_mobile}
                     />
                 </li> }
-                <li className={`${constructorStyles.fixings} pr-2`}>
+                <ul className={`${constructorStyles.fixings} pr-2`}>
                 {   fixings && fixings.length > 0 && 
                         fixings.map((item, index) =>
                         <FixingsContainer
@@ -63,7 +63,7 @@ const BurgerConstructor:FC<IBurgerConstructor> = () => {
                         handleDelete={handleDelete} />
                         )
                     }               
-                </li>               
+                </ul>               
                 { bun && <li key={`${bun._id}bottom`} className={`pl-8 mt-4 pr-4`}>
                     <ConstructorElement
                         type='bottom'
