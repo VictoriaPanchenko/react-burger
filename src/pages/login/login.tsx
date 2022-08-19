@@ -7,6 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
 import { loginUser } from "../../services/actions/user";
+import { ILocation } from "../../services/types";
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
 interface ILoginPage extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {}
@@ -21,7 +22,7 @@ export const LoginPage:FC<ILoginPage> = () => {
 
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const location = useLocation<any>();
+  const location = useLocation<ILocation>();
 
   useEffect(() => {
     if (user) {

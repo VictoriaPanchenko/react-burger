@@ -27,7 +27,7 @@ export interface IIngredient {
     type: string;
     name: string;
   };  
-  
+
   export interface IOwner {
     name: string;
     email: string;
@@ -57,6 +57,12 @@ export interface IIngredient {
     _id: string;
   }
   
+  export interface ILocation {
+    from: Location;
+    previousLocation?: Location;
+    background?: Location;
+    pathname: string;
+}
   
 
 export type TApplicationActions = | TConstructorActions | TDetailActions | TIngredientsActions | TOrderActions | TWsActions | TUserActions ;
