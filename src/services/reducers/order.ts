@@ -6,8 +6,6 @@ import {
   CLOSE_ORDER_MODAL,
   OPEN_ORDER_MODAL,
   CLEAR_ORDER_ERROR,
-  OPEN_ORDER_DETAIL_MODAL,
-  CLOSE_ORDER_DETAIL_MODAL,
 } from "../constants/order";
 
 type TOrderState = {
@@ -15,15 +13,13 @@ type TOrderState = {
   orderFailed: boolean;
   orderNumber: number | null;
   isOrderModalOpened: boolean;
-  isOrderDetailModalOpened: boolean;
 };
 
 const initialState: TOrderState = {
   orderRequest: false,
   orderFailed: false,
   orderNumber: null,
-  isOrderModalOpened: false,
-  isOrderDetailModalOpened: false,
+  isOrderModalOpened: false
 };
 
 export const orderReducer = (
@@ -66,16 +62,6 @@ export const orderReducer = (
         orderFailed: false,
       };
     }
-    case CLOSE_ORDER_DETAIL_MODAL:
-      return {
-        ...state,
-        isOrderDetailModalOpened: false,
-      };
-    case OPEN_ORDER_DETAIL_MODAL:
-      return {
-        ...state,
-        isOrderDetailModalOpened: true,
-      };
     default:
       return state;
   }

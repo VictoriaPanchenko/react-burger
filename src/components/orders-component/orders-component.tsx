@@ -1,11 +1,10 @@
-import React, { useCallback, FC, DetailedHTMLProps, LiHTMLAttributes } from "react";
+import React, { FC, DetailedHTMLProps, LiHTMLAttributes } from "react";
 import { IIngredient, IWsOrder } from "../../services/types";
 import { Link, useLocation } from 'react-router-dom';
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./orders-component.module.css";
 import { formatDate } from "../../utils/helpers";
 import { useAppDispatch, useAppSelector } from "../../services/store";
-import { openOrderDetailModal } from "../../services/actions/order";
 
 
 interface IOrdersComponent extends DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement> {
@@ -14,12 +13,6 @@ interface IOrdersComponent extends DetailedHTMLProps<LiHTMLAttributes<HTMLLIElem
 }
 
 export const OrdersComponent: FC<IOrdersComponent> = ({ order, isHistory = false }) => {
-
-  const dispatch = useAppDispatch();
-
-  const openModal = useCallback(() => {
-    dispatch(openOrderDetailModal());
-  }, [dispatch, openOrderDetailModal]);
 
   const location = useLocation();
 
@@ -56,7 +49,6 @@ export const OrdersComponent: FC<IOrdersComponent> = ({ order, isHistory = false
           pathname: `${location.pathname}/${_id}`,
           state: { background: location },
         }}
-        onClick={openModal}
       >
 
         <div className={styles.header}>

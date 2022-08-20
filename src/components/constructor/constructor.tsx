@@ -20,7 +20,7 @@ import {
 } from "../../pages";
 import { checkAuth } from "../../services/actions/user";
 import { clearConstructor } from "../../services/actions/constructor";
-import { OrdersInfoDetails } from "../order-info-details/order-info-details";
+import { OrderInfoCard } from "../order-info-card/order-info-card";
 import Preloader from "../preloader/preloader";
 import { useAppSelector, useAppDispatch } from "../../services/store";
 import { FC, DetailedHTMLProps, HTMLAttributes } from "react";
@@ -34,21 +34,19 @@ export const Constructor: FC<IConstructor> = () => {
   const background = location?.state?.background;
   const from = location?.state?.from;
 
-  const { orderNumber, orderRequest, orderFailed, isOrderDetailModalOpened } =
+  // при перезагрузке страницы будет открываться отдельная страничка, а не модалка
+  // const background = history.action === 'PUSH' && location.state?.background;
+
+  const { orderNumber, orderRequest, orderFailed } =
     useAppSelector((store) => store.order);
 
   const dispatch = useAppDispatch();
-  const closeIngredientDetailModal = useCallback(
+  const closeModal = useCallback(
     (path) => {
       history.push(path);
     },
     [dispatch, history]
   );
-
-  const closeOrdersModal = useCallback(() => {
-    history.goBack();
-    // dispatch(cleanOrderInfo());
-  }, [dispatch, history]);
 
   const closeOrderDetailModal = useCallback(() => {
     dispatch(closeOrderModal());
@@ -69,25 +67,24 @@ export const Constructor: FC<IConstructor> = () => {
     <Route exact path="/ingredients/:id">
       <Modal
         title="Детали ингредиента"
-        onClose={() => closeIngredientDetailModal("/")}
-      >
+        onClose={() => closeModal("/")}>
         <IngredientDetails />
       </Modal>
     </Route>
   );
 
   const modalOrderDetailFromFeed = (
-    <Route exact path="/feed/:id">
-      <Modal onClose={() => closeOrdersModal()}>
-        <OrdersInfoDetails isPopup />
+    <Route exact path={`/feed/:id`}>
+      <Modal onClose={() => closeModal(`/feed`)}>
+        <OrderInfoCard />
       </Modal>
     </Route>
   );
 
   const modalOrderDetailFromProfile = (
-    <Route exact path="/profile/orders/:id">
-      <Modal onClose={() => closeOrdersModal()}>
-        <OrdersInfoDetails isPopup personal />
+    <Route exact path={`/profile/orders/:id`}>
+      <Modal onClose={() => closeModal(`/profile/orders`)}>
+        <OrderInfoCard />
       </Modal>
     </Route>
   );
@@ -102,10 +99,10 @@ export const Constructor: FC<IConstructor> = () => {
           <FeedPage />
         </Route>
         <Route exact path="/feed/:id">
-          {!isOrderDetailModalOpened && <OrderInfoPage />}
+          <OrderInfoPage />
         </Route>
         <Route exact path="/profile/orders/:id">
-          {!isOrderDetailModalOpened && <OrderInfoPage personal />}
+          <OrderInfoPage personal />
         </Route>
         <Route exact path="/login">
           <LoginPage />
@@ -131,9 +128,9 @@ export const Constructor: FC<IConstructor> = () => {
         </Route>
       </Switch>
 
-      {isOrderDetailModalOpened && modalOrderDetailFromFeed}
+      {background && modalOrderDetailFromFeed}
 
-      {isOrderDetailModalOpened && modalOrderDetailFromProfile}
+      {background && modalOrderDetailFromProfile}
 
       {background && modalDetail}
 

@@ -7,9 +7,7 @@ import {
   POST_ORDER_SUCCESS,
   CLOSE_ORDER_MODAL,
   OPEN_ORDER_MODAL,
-  CLEAR_ORDER_ERROR,
-  OPEN_ORDER_DETAIL_MODAL,
-  CLOSE_ORDER_DETAIL_MODAL,
+  CLEAR_ORDER_ERROR
 } from "../constants/order";
 
 export interface ICloseOrderModalAction {
@@ -18,14 +16,6 @@ export interface ICloseOrderModalAction {
 
 export interface IOpenOrderModalAction {
   readonly type: typeof OPEN_ORDER_MODAL;
-}
-
-export interface IOpenOrderDetailModalAction {
-  readonly type: typeof OPEN_ORDER_DETAIL_MODAL;
-}
-
-export interface ICloseOrderDetailModalAction {
-  readonly type: typeof CLOSE_ORDER_DETAIL_MODAL;
 }
 
 export interface IResetOrderErrorAction {
@@ -48,8 +38,6 @@ export interface IPostOrderSuccessAction {
 export type TOrderActions =
   | ICloseOrderModalAction
   | IOpenOrderModalAction
-  | IOpenOrderDetailModalAction
-  | ICloseOrderDetailModalAction
   | IResetOrderErrorAction
   | IPostOrderRequestAction
   | IPostOrderFailedAction
@@ -94,18 +82,6 @@ export function closeOrderModal(): ICloseOrderModalAction {
 export function openOrderModal(): IOpenOrderModalAction {
   return {
     type: OPEN_ORDER_MODAL,
-  };
-}
-
-export function openOrderDetailModal(): IOpenOrderDetailModalAction {
-  return {
-    type: OPEN_ORDER_DETAIL_MODAL,
-  };
-}
-
-export function closeOrderDetailModal(): ICloseOrderDetailModalAction {
-  return {
-    type: CLOSE_ORDER_DETAIL_MODAL,
   };
 }
 
