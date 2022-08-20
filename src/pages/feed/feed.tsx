@@ -25,7 +25,7 @@ export const FeedPage: FC<IFeedPage> = () => {
     dispatch(wsInit());
     return () => {
       dispatch(wsClose());
-    };  
+    };
   }, [dispatch]);
 
   const resetError = useCallback(() => {
@@ -33,11 +33,11 @@ export const FeedPage: FC<IFeedPage> = () => {
   }, [dispatch]);
 
   return (
-    <article className={styles.container}>
+    <article>
       {wsRequest && !wsFailed && <Preloader />}
-
+      
       {!wsRequest && !wsFailed && orders && (
-        <div>
+        <div className={styles.container}>
           <OrderList />
           <OrderInfo />
         </div>
