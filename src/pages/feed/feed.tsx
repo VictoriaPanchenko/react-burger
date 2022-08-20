@@ -8,7 +8,7 @@ import React, {
 import { useAppDispatch, useAppSelector } from "../../services/store";
 import styles from "./feed.module.css";
 import { OrderList } from "../../components/order-list/order-list";
-import { OrderInfo } from "../../components/order-info/order-info";
+import { OrderInfo } from "../../components/order-info/orders-total-info";
 import { wsClose, wsInit, wsResetError } from "../../services/actions/ws";
 import Preloader from "../../components/preloader/preloader";
 import Notification from "../../components/notification/notification";
@@ -35,7 +35,7 @@ export const FeedPage: FC<IFeedPage> = () => {
   return (
     <article>
       {wsRequest && !wsFailed && <Preloader />}
-      
+
       {!wsRequest && !wsFailed && orders && (
         <div className={styles.container}>
           <OrderList />

@@ -1,18 +1,26 @@
 .card {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    max-width: 265px;
-    cursor: pointer;
-  }
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 265px;
+  cursor: pointer;
+}
 
-  .title {
-    text-align: center;
-  }
+.link {
+  text-decoration: none;
+  color: inherit;
+}
 
-  .isDragging {
-    background: radial-gradient(circle, rgba(166, 81, 195, 1) 0%, rgba(19, 19, 22, 0) 45%);
-  }
-  
+.title {
+  text-align: center;
+}
+
+.isDragging {
+  background: radial-gradient(
+    circle,
+    rgba(166, 81, 195, 1) 0%,
+    rgba(19, 19, 22, 0) 45%
+  );
+}

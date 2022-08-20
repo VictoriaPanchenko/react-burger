@@ -7,7 +7,6 @@ import Modal from "../modal/modal";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import MainContent from "../main-content/main-content";
 import { closeOrderModal } from "../../services/actions/order";
-import { closeDetailModal } from "../../services/actions/ingredient-detail";
 import {
   LoginPage,
   RegisterPage,
@@ -31,21 +30,16 @@ interface IConstructor
 
 export const Constructor: FC<IConstructor> = () => {
   const location = useLocation<any>();
+  const history = useHistory();
+  const background = location?.state?.background;
+  const from = location?.state?.from;
 
   const { orderNumber, orderRequest, orderFailed, isOrderDetailModalOpened } =
     useAppSelector((store) => store.order);
 
-  const { isDetailOpened: openDetailPopUp } = useAppSelector(
-    (store) => store.itemDetail
-  );
-
   const dispatch = useAppDispatch();
-
-  const history = useHistory();
-
   const closeIngredientDetailModal = useCallback(
     (path) => {
-      dispatch(closeDetailModal());
       history.push(path);
     },
     [dispatch, history]
@@ -100,7 +94,7 @@ export const Constructor: FC<IConstructor> = () => {
 
   return (
     <div className={`${styles.constructor} mb-10`}>
-      <Switch>
+      <Switch location={background || location}>
         <Route exact path="/">
           <MainContent />
         </Route>
@@ -123,7 +117,7 @@ export const Constructor: FC<IConstructor> = () => {
           <ForgotPasswordPage />
         </Route>
         <Route exact path="/ingredients/:id">
-          {!openDetailPopUp && <IngredientPage />}
+           <IngredientPage />
         </Route>
 
         <Route exact path="/reset-password">
@@ -141,7 +135,7 @@ export const Constructor: FC<IConstructor> = () => {
 
       {isOrderDetailModalOpened && modalOrderDetailFromProfile}
 
-      {openDetailPopUp && modalDetail}
+      {background && modalDetail}
 
       {!orderRequest && !orderFailed ? modalOrder : <Preloader />}
     </div>

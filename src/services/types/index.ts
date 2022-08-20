@@ -1,5 +1,4 @@
 import { TConstructorActions } from "../actions/constructor";
-import { TDetailActions } from "../actions/ingredient-detail";
 import { TIngredientsActions } from "../actions/ingredients";
 import { TOrderActions } from "../actions/order";
 import { TUserActions } from "../actions/user";
@@ -65,4 +64,4 @@ export interface IIngredient {
 }
   
 
-export type TApplicationActions = | TConstructorActions | TDetailActions | TIngredientsActions | TOrderActions | TWsActions | TUserActions ;
+export type TApplicationActions = | TConstructorActions | TIngredientsActions | TOrderActions | TWsActions | TUserActions ;

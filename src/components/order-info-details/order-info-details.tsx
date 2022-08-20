@@ -94,7 +94,7 @@ export const OrdersInfoDetails: FC<IOrdersInfoDetails> = ({
 
   return (
     <div>
-      {!orders && wsRequest && <Preloader />}
+      {wsRequest && !orders && <Preloader />}
 
       {orders && wsOpen && orderInfo?.number && (
         <div
